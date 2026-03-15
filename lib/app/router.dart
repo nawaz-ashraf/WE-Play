@@ -9,6 +9,9 @@ import 'package:we_play/features/profile/profile_screen.dart';
 import 'package:we_play/features/games/game_screen.dart';
 import 'package:we_play/features/games/glow_merge/glow_merge_screen.dart';
 import 'package:we_play/features/games/beat_crash/beat_crash_screen.dart';
+import 'package:we_play/features/games/snack_stackers/snack_screen.dart';
+import 'package:we_play/features/games/micro_heist/heist_screen.dart';
+import 'package:we_play/features/games/flick_royale/flick_screen.dart';
 import 'package:we_play/app/theme.dart';
 
 /// Bottom navigation shell for main screens
@@ -114,6 +117,18 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: 'game/beat_crash',
               builder: (context, state) => const BeatCrashScreen(),
+            ),
+            GoRoute(
+              path: 'game/snack_stackers',
+              builder: (context, state) => const SnackStackersScreen(),
+            ),
+            GoRoute(
+              path: 'game/micro_heist',
+              builder: (context, state) => const MicroHeistScreen(),
+            ),
+            GoRoute(
+              path: 'game/flick_royale',
+              builder: (context, state) => const FlickRoyaleScreen(),
             ),
             GoRoute(
               path: 'game/:id',

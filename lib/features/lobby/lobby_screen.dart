@@ -380,7 +380,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                               highScore: _games[1].highScore,
                               playerCount: _games[1].playerCount,
                               onTap: () =>
-                                  context.go('/lobby/game/${_games[1].id}'),
+                                  context.push('/lobby/game/snack_stackers'),
                             ),
                           ),
                         ),
@@ -402,7 +402,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                               highScore: _games[2].highScore,
                               playerCount: _games[2].playerCount,
                               onTap: () =>
-                                  context.go('/lobby/game/${_games[2].id}'),
+                                  context.push('/lobby/game/micro_heist'),
                             ),
                           ),
                         ),
@@ -438,7 +438,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                         highScore: _games[4].highScore,
                         playerCount: _games[4].playerCount,
                         isWide: true,
-                        onTap: () => context.go('/lobby/game/${_games[4].id}'),
+                        onTap: () => context.push('/lobby/game/flick_royale'),
                       ),
                     ),
                     const SizedBox(height: 24),
