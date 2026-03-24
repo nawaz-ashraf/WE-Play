@@ -90,15 +90,6 @@ const _games = [
     highScore: 0,
     playerCount: 745,
   ),
-  _GameInfo(
-    id: 'mini_golf',
-    name: 'Mini Golf',
-    description: 'hole in one',
-    icon: Icons.golf_course_rounded,
-    accentColor: Color(0xFF00C853),
-    highScore: 0,
-    playerCount: 298,
-  ),
 ];
 
 /// Now Playing banner — horizontal scroll showing top players
@@ -512,22 +503,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                           ),
                         ),
                         const SizedBox(width: 12),
-                        Expanded(
-                          child: SizedBox(
-                            height: 170,
-                            child: GameCard(
-                              gameId: _games[7].id,
-                              name: _games[7].name,
-                              description: _games[7].description,
-                              icon: _games[7].icon,
-                              accentColor: _games[7].accentColor,
-                              highScore: _games[7].highScore,
-                              playerCount: _games[7].playerCount,
-                              onTap: () =>
-                                  context.push('/lobby/game/mini_golf'),
-                            ),
-                          ),
-                        ),
+                        const Expanded(child: SizedBox.shrink()),
                       ],
                     ),
                     const SizedBox(height: 24),

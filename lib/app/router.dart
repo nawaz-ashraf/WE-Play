@@ -14,7 +14,6 @@ import 'package:we_play/features/games/micro_heist/heist_screen.dart';
 import 'package:we_play/features/games/flappy_bird/flappy_screen.dart';
 import 'package:we_play/features/games/memory_puzzle/memory_screen.dart';
 import 'package:we_play/features/games/snake_game/snake_screen.dart';
-import 'package:we_play/features/games/mini_golf/golf_screen.dart';
 import 'package:we_play/app/theme.dart';
 
 /// Bottom navigation shell for main screens
@@ -140,10 +139,6 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: 'game/snake_game',
               builder: (context, state) => const SnakeGameScreen(),
-            ),
-            GoRoute(
-              path: 'game/mini_golf',
-              builder: (context, state) => const MiniGolfScreen(),
             ),
             GoRoute(
               path: 'game/:id',
