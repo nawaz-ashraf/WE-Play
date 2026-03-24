@@ -72,6 +72,42 @@ const _games = [
     highScore: 9,
     playerCount: 378,
   ),
+  _GameInfo(
+    id: 'flappy_bird',
+    name: 'Flappy Bird',
+    description: 'dodge the pipes',
+    icon: Icons.flutter_dash_rounded,
+    accentColor: Color(0xFF7B61FF),
+    highScore: 0,
+    playerCount: 512,
+  ),
+  _GameInfo(
+    id: 'memory_puzzle',
+    name: 'Memory Puzzle',
+    description: 'flip & match',
+    icon: Icons.style_rounded,
+    accentColor: Color(0xFFFF3E6C),
+    highScore: 0,
+    playerCount: 387,
+  ),
+  _GameInfo(
+    id: 'snake_game',
+    name: 'Snake Game',
+    description: 'grow or die',
+    icon: Icons.pest_control_rounded,
+    accentColor: Color(0xFF00F5A0),
+    highScore: 0,
+    playerCount: 745,
+  ),
+  _GameInfo(
+    id: 'mini_golf',
+    name: 'Mini Golf',
+    description: 'hole in one',
+    icon: Icons.golf_course_rounded,
+    accentColor: Color(0xFF00C853),
+    highScore: 0,
+    playerCount: 298,
+  ),
 ];
 
 /// Now Playing banner — horizontal scroll showing top players
@@ -440,6 +476,84 @@ class _LobbyScreenState extends State<LobbyScreen>
                         isWide: true,
                         onTap: () => context.push('/lobby/game/flick_royale'),
                       ),
+                    ),
+                    const SizedBox(height: 12),
+                    // Fourth row: Flappy Bird + Memory Puzzle
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 170,
+                            child: GameCard(
+                              gameId: _games[5].id,
+                              name: _games[5].name,
+                              description: _games[5].description,
+                              icon: _games[5].icon,
+                              accentColor: _games[5].accentColor,
+                              highScore: _games[5].highScore,
+                              playerCount: _games[5].playerCount,
+                              onTap: () =>
+                                  context.push('/lobby/game/flappy_bird'),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: SizedBox(
+                            height: 170,
+                            child: GameCard(
+                              gameId: _games[6].id,
+                              name: _games[6].name,
+                              description: _games[6].description,
+                              icon: _games[6].icon,
+                              accentColor: _games[6].accentColor,
+                              highScore: _games[6].highScore,
+                              playerCount: _games[6].playerCount,
+                              onTap: () =>
+                                  context.push('/lobby/game/memory_puzzle'),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // Fifth row: Snake Game + Mini Golf
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                            height: 170,
+                            child: GameCard(
+                              gameId: _games[7].id,
+                              name: _games[7].name,
+                              description: _games[7].description,
+                              icon: _games[7].icon,
+                              accentColor: _games[7].accentColor,
+                              highScore: _games[7].highScore,
+                              playerCount: _games[7].playerCount,
+                              onTap: () =>
+                                  context.push('/lobby/game/snake_game'),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: SizedBox(
+                            height: 170,
+                            child: GameCard(
+                              gameId: _games[8].id,
+                              name: _games[8].name,
+                              description: _games[8].description,
+                              icon: _games[8].icon,
+                              accentColor: _games[8].accentColor,
+                              highScore: _games[8].highScore,
+                              playerCount: _games[8].playerCount,
+                              onTap: () =>
+                                  context.push('/lobby/game/mini_golf'),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 24),
                   ],

@@ -12,6 +12,10 @@ import 'package:we_play/features/games/beat_crash/beat_crash_screen.dart';
 import 'package:we_play/features/games/snack_stackers/snack_screen.dart';
 import 'package:we_play/features/games/micro_heist/heist_screen.dart';
 import 'package:we_play/features/games/flick_royale/flick_screen.dart';
+import 'package:we_play/features/games/flappy_bird/flappy_screen.dart';
+import 'package:we_play/features/games/memory_puzzle/memory_screen.dart';
+import 'package:we_play/features/games/snake_game/snake_screen.dart';
+import 'package:we_play/features/games/mini_golf/golf_screen.dart';
 import 'package:we_play/app/theme.dart';
 
 /// Bottom navigation shell for main screens
@@ -129,6 +133,22 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: 'game/flick_royale',
               builder: (context, state) => const FlickRoyaleScreen(),
+            ),
+            GoRoute(
+              path: 'game/flappy_bird',
+              builder: (context, state) => const FlappyBirdScreen(),
+            ),
+            GoRoute(
+              path: 'game/memory_puzzle',
+              builder: (context, state) => const MemoryPuzzleScreen(),
+            ),
+            GoRoute(
+              path: 'game/snake_game',
+              builder: (context, state) => const SnakeGameScreen(),
+            ),
+            GoRoute(
+              path: 'game/mini_golf',
+              builder: (context, state) => const MiniGolfScreen(),
             ),
             GoRoute(
               path: 'game/:id',
