@@ -38,7 +38,7 @@ class BeatBlock extends PositionComponent {
         ) {
     _paint = Paint()..color = _color;
     _glowPaint = Paint()
-      ..color = _color.withOpacity(0.35)
+      ..color = _color.withValues(alpha: 0.35)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
   }
 
@@ -74,7 +74,7 @@ class BeatBlock extends PositionComponent {
     canvas.drawRRect(rrect, _paint);
     // Inner shine
     final shinePaint = Paint()
-      ..color = Colors.white.withOpacity(0.15);
+      ..color = Colors.white.withValues(alpha: 0.15);
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromLTWH(4, 4, size.x - 8, size.y * 0.35),
@@ -119,7 +119,7 @@ class TargetZone extends PositionComponent {
   void render(Canvas canvas) {
     // Glow
     final glowPaint = Paint()
-      ..color = (_pulse ? _pulseColor : BeatColors.primary).withOpacity(0.3)
+      ..color = (_pulse ? _pulseColor : BeatColors.primary).withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 16);
     canvas.drawRect(Rect.fromLTWH(-8, -8, size.x + 16, size.y + 16), glowPaint);
 
@@ -130,7 +130,7 @@ class TargetZone extends PositionComponent {
     canvas.drawLine(Offset(0, size.y / 2), Offset(size.x, size.y / 2), linePaint);
 
     // Lane separators
-    final sepPaint = Paint()..color = Colors.white.withOpacity(0.05);
+    final sepPaint = Paint()..color = Colors.white.withValues(alpha: 0.05);
     final laneW = size.x / BeatConst.lanes;
     for (int i = 1; i < BeatConst.lanes; i++) {
       canvas.drawLine(
@@ -162,7 +162,7 @@ class HitParticleBurst extends ParticleSystemComponent {
                 acceleration: Vector2(0, 180),
                 child: CircleParticle(
                   radius: 3 + Random().nextDouble() * 3,
-                  paint: Paint()..color = color.withOpacity(0.9),
+                  paint: Paint()..color = color.withValues(alpha: 0.9),
                 ),
               );
             },
@@ -219,10 +219,10 @@ class HitLabel extends PositionComponent {
       fontFamily: 'Orbitron',
       fontSize: 22,
       fontWeight: FontWeight.w700,
-      color: _color.withOpacity(_opacity),
+      color: _color.withValues(alpha: _opacity),
       shadows: [
         Shadow(
-          color: _color.withOpacity(_opacity * 0.8),
+          color: _color.withValues(alpha: _opacity * 0.8),
           blurRadius: 16,
         ),
       ],
@@ -256,7 +256,7 @@ class BeatBackground extends Component {
     );
     // Grid lines
     final gridPaint = Paint()
-      ..color = BeatColors.primary.withOpacity(0.04)
+      ..color = BeatColors.primary.withValues(alpha: 0.04)
       ..strokeWidth = 1;
     for (double y = -60 + _scrollY; y < screenH; y += 60) {
       canvas.drawLine(Offset(0, y), Offset(screenW, y), gridPaint);
@@ -292,7 +292,7 @@ class ScreenFlash extends PositionComponent {
   void render(Canvas canvas) {
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.x, size.y),
-      Paint()..color = color.withOpacity(_opacity.clamp(0, 1)),
+      Paint()..color = color.withValues(alpha: _opacity.clamp(0, 1)),
     );
   }
 }

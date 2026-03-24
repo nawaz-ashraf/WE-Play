@@ -73,7 +73,9 @@ class GlowMergeEngine {
         if (grid[r][c] == null) empty.add([r, c]);
       }
     }
-    if (empty.isEmpty) return;
+    if (empty.isEmpty) {
+      return;
+    }
     final pos = empty[_rng.nextInt(empty.length)];
     grid[pos[0]][pos[1]] =
         Blob(value: _rng.nextDouble() < 0.9 ? 1 : 2, id: _newId());
@@ -133,7 +135,9 @@ class GlowMergeEngine {
     }
 
     final moved = !_gridsEqual(grid, copy);
-    if (moved) _addRandomBlob(copy);
+    if (moved) {
+      _addRandomBlob(copy);
+    }
 
     final coins = merges.where((m) => m.resultValue >= 32).length;
 
@@ -177,16 +181,24 @@ class GlowMergeEngine {
     // Any empty cell
     for (int r = 0; r < size; r++) {
       for (int c = 0; c < size; c++) {
-        if (grid[r][c] == null) return true;
+        if (grid[r][c] == null) {
+          return true;
+        }
       }
     }
     // Any adjacent equal
     for (int r = 0; r < size; r++) {
       for (int c = 0; c < size; c++) {
         final v = grid[r][c]?.value;
-        if (v == null) continue;
-        if (c + 1 < size && grid[r][c + 1]?.value == v) return true;
-        if (r + 1 < size && grid[r + 1][c]?.value == v) return true;
+        if (v == null) {
+          continue;
+        }
+        if (c + 1 < size && grid[r][c + 1]?.value == v) {
+          return true;
+        }
+        if (r + 1 < size && grid[r + 1][c]?.value == v) {
+          return true;
+        }
       }
     }
     return false;
@@ -199,7 +211,9 @@ class GlowMergeEngine {
   bool _gridsEqual(List<List<Blob?>> a, List<List<Blob?>> b) {
     for (int r = 0; r < size; r++) {
       for (int c = 0; c < size; c++) {
-        if (a[r][c]?.id != b[r][c]?.id) return false;
+        if (a[r][c]?.id != b[r][c]?.id) {
+          return false;
+        }
       }
     }
     return true;

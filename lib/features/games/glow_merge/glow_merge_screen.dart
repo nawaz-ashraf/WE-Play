@@ -24,8 +24,8 @@ class _GlowMergeScreenState extends ConsumerState<GlowMergeScreen>
   // Score animation
   late AnimationController _scoreController;
   late Animation<double> _scoreAnim;
-  int _displayedScore = 0;
-  int _targetScore = 0;
+  // int _displayedScore = 0; // Removed as unused
+  // int _targetScore = 0; // Removed as unused
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _GlowMergeScreenState extends ConsumerState<GlowMergeScreen>
     _scoreAnim = CurvedAnimation(parent: _scoreController, curve: Curves.easeOut);
     _scoreAnim.addListener(() {
       setState(() {
-        _displayedScore = (_targetScore * _scoreAnim.value).toInt();
+        // _displayedScore = (_targetScore * _scoreAnim.value).toInt(); // Commented out as unused
       });
     });
 
@@ -54,8 +54,8 @@ class _GlowMergeScreenState extends ConsumerState<GlowMergeScreen>
   }
 
   void _animateScore(int to) {
-    _targetScore = to;
-    _displayedScore = 0;
+    // _targetScore = to; // Commented out as unused
+    // _displayedScore = 0; // Commented out as unused
     _scoreController.forward(from: 0);
   }
 
@@ -122,7 +122,7 @@ class _GlowMergeScreenState extends ConsumerState<GlowMergeScreen>
               fontWeight: FontWeight.w700,
               color: GlowColors.primary,
               letterSpacing: 2,
-              shadows: [Shadow(color: GlowColors.primary.withOpacity(0.5), blurRadius: 12)],
+              shadows: [Shadow(color: GlowColors.primary.withValues(alpha: 0.5), blurRadius: 12)],
             ),
           ),
           IconButton(
@@ -160,7 +160,7 @@ class _GlowMergeScreenState extends ConsumerState<GlowMergeScreen>
       decoration: BoxDecoration(
         color: GlowColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.25)),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
       ),
       child: Column(
         children: [
@@ -212,7 +212,7 @@ class _GlowMergeScreenState extends ConsumerState<GlowMergeScreen>
             decoration: BoxDecoration(
               color: GlowColors.gridBg,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: GlowColors.primary.withOpacity(0.2)),
+              border: Border.all(color: GlowColors.primary.withValues(alpha: 0.2)),
             ),
             child: GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
@@ -305,7 +305,7 @@ class _BlobCell extends StatelessWidget {
         border: Border.all(color: style.border, width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: style.border.withOpacity(0.4),
+            color: style.border.withValues(alpha: 0.4),
             blurRadius: isMerged ? 16 : 6,
             spreadRadius: isMerged ? 2 : 0,
           ),
@@ -358,7 +358,7 @@ class _BlobCell extends StatelessWidget {
           )
           .shimmer(
             duration: 400.ms,
-            color: style.border.withOpacity(0.8),
+            color: style.border.withValues(alpha: 0.8),
           );
     }
 
@@ -403,7 +403,7 @@ class _GameOverSheet extends StatelessWidget {
             height: 4,
             margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
-              color: GlowColors.textSecondary.withOpacity(0.4),
+              color: GlowColors.textSecondary.withValues(alpha: 0.4),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -425,7 +425,7 @@ class _GameOverSheet extends StatelessWidget {
               fontSize: 28,
               fontWeight: FontWeight.w700,
               color: GlowColors.energy,
-              shadows: [Shadow(color: GlowColors.energy.withOpacity(0.5), blurRadius: 16)],
+              shadows: [Shadow(color: GlowColors.energy.withValues(alpha: 0.5), blurRadius: 16)],
             ),
           ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.3),
 
@@ -515,11 +515,11 @@ class _GlowButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [color, color.withOpacity(0.7)],
+            colors: [color, color.withValues(alpha: 0.7)],
           ),
           borderRadius: BorderRadius.circular(999),
           boxShadow: [
-            BoxShadow(color: color.withOpacity(0.4), blurRadius: 20, spreadRadius: 2),
+            BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 20, spreadRadius: 2),
           ],
         ),
         child: Center(

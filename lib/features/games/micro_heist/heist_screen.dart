@@ -25,7 +25,7 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
   bool _showingSheet    = false;
 
   // Swipe detection
-  Offset? _swipeStart;
+  // Offset? _swipeStart; // Removed as unused
 
   @override
   void initState() {
@@ -77,7 +77,7 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
         children: [
           // ── Flame canvas + swipe wrapper ──
           GestureDetector(
-            onPanStart:  (d) => _swipeStart = d.globalPosition,
+            onPanStart:  (d) {},
             onPanEnd:    (d) => _handleSwipe(d.velocity.pixelsPerSecond),
             child: GameWidget(game: _game),
           ),
@@ -134,9 +134,9 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: HeistColors.primary.withOpacity(0.15),
+              color: HeistColors.primary.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(999),
-              border: Border.all(color: HeistColors.primary.withOpacity(0.4)),
+              border: Border.all(color: HeistColors.primary.withValues(alpha: 0.4)),
             ),
             child: Text(
               'LVL ${state.level + 1}  ${state.currentLevel.title}',
@@ -231,7 +231,7 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
                   color: HeistColors.surface,
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: HeistColors.primary.withOpacity(0.3)),
+                      color: HeistColors.primary.withValues(alpha: 0.3)),
                 ),
               ),
             ),
@@ -249,10 +249,10 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
         decoration: BoxDecoration(
           color: HeistColors.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: HeistColors.accent.withOpacity(0.5)),
+          border: Border.all(color: HeistColors.accent.withValues(alpha: 0.5)),
           boxShadow: [
             BoxShadow(
-              color: HeistColors.accent.withOpacity(0.2),
+              color: HeistColors.accent.withValues(alpha: 0.2),
               blurRadius: 30,
               spreadRadius: 5,
             ),
@@ -272,7 +272,7 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
                 color: HeistColors.accent,
                 shadows: [
                   Shadow(
-                      color: HeistColors.accent.withOpacity(0.5),
+                      color: HeistColors.accent.withValues(alpha: 0.5),
                       blurRadius: 12),
                 ],
               ),
@@ -301,7 +301,7 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
   // ── Start Overlay ─────────────────────────
   Widget _buildStartOverlay() {
     return Container(
-      color: HeistColors.background.withOpacity(0.9),
+      color: HeistColors.background.withValues(alpha: 0.9),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -321,7 +321,7 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
                 letterSpacing: 2,
                 shadows: [
                   Shadow(
-                      color: HeistColors.primary.withOpacity(0.6),
+                      color: HeistColors.primary.withValues(alpha: 0.6),
                       blurRadius: 20),
                 ],
               ),
@@ -394,8 +394,9 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
     }
 
     if (!mounted) return;
+    if (!mounted) return;
     showModalBottomSheet(
-      context: ctx,
+      context: context,
       backgroundColor: Colors.transparent,
       isDismissible: false,
       builder: (_) => _GameOverSheet(
@@ -436,8 +437,9 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
     }
 
     if (!mounted) return;
+    if (!mounted) return;
     showModalBottomSheet(
-      context: ctx,
+      context: context,
       backgroundColor: Colors.transparent,
       isDismissible: false,
       builder: (_) => _GameOverSheet(
@@ -480,7 +482,7 @@ class _DPadBtn extends StatelessWidget {
         decoration: BoxDecoration(
           color: HeistColors.surface,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: HeistColors.primary.withOpacity(0.3)),
+          border: Border.all(color: HeistColors.primary.withValues(alpha: 0.3)),
         ),
         child: Icon(icon, color: HeistColors.primary, size: 28),
       ),
@@ -505,9 +507,9 @@ class _TimerChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: color.withOpacity(0.4)),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Text(
         '${timeLeft.ceil()}s',
@@ -557,7 +559,7 @@ class _GameOverSheet extends StatelessWidget {
             width: 40, height: 4,
             margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
-              color: HeistColors.textSecondary.withOpacity(0.3),
+              color: HeistColors.textSecondary.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -582,7 +584,7 @@ class _GameOverSheet extends StatelessWidget {
               shadows: [
                 Shadow(
                   color: (busted ? HeistColors.energy : HeistColors.accent)
-                      .withOpacity(0.5),
+                      .withValues(alpha: 0.5),
                   blurRadius: 16,
                 ),
               ],
@@ -659,11 +661,11 @@ class _GlowButton extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [color, color.withOpacity(0.7)]),
+          gradient: LinearGradient(colors: [color, color.withValues(alpha: 0.7)]),
           borderRadius: BorderRadius.circular(999),
           boxShadow: [
             BoxShadow(
-                color: color.withOpacity(0.45), blurRadius: 20, spreadRadius: 2),
+                color: color.withValues(alpha: 0.45), blurRadius: 20, spreadRadius: 2),
           ],
         ),
         child: Center(

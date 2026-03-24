@@ -100,7 +100,7 @@ class _BeatCrashScreenState extends ConsumerState<BeatCrashScreen> {
                     color: BeatColors.textPrimary,
                   ),
                 ),
-                Text(
+                const Text(
                   'score',
                   style: TextStyle(
                     fontSize: 10,
@@ -160,7 +160,7 @@ class _BeatCrashScreenState extends ConsumerState<BeatCrashScreen> {
                 ),
               ),
               Text(
-                'next: ${nextThresh}',
+                'next: $nextThresh',
                 style: const TextStyle(
                   fontSize: 10,
                   color: BeatColors.textSecondary,
@@ -186,7 +186,7 @@ class _BeatCrashScreenState extends ConsumerState<BeatCrashScreen> {
   // ── Start overlay ─────────────────────────
   Widget _buildStartOverlay() {
     return Container(
-      color: BeatColors.background.withOpacity(0.85),
+      color: BeatColors.background.withValues(alpha: 0.85),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -201,7 +201,7 @@ class _BeatCrashScreenState extends ConsumerState<BeatCrashScreen> {
                 letterSpacing: 3,
                 shadows: [
                   Shadow(
-                      color: BeatColors.primary.withOpacity(0.6),
+                      color: BeatColors.primary.withValues(alpha: 0.6),
                       blurRadius: 24),
                 ],
               ),
@@ -322,9 +322,9 @@ class _MultiplierBadge extends StatelessWidget {
       width: 44,
       height: 44,
       decoration: BoxDecoration(
-        color: BeatColors.accent.withOpacity(0.15),
+        color: BeatColors.accent.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: BeatColors.accent.withOpacity(0.5)),
+        border: Border.all(color: BeatColors.accent.withValues(alpha: 0.5)),
       ),
       child: Center(
         child: Text(
@@ -383,7 +383,7 @@ class _GameOverSheet extends StatelessWidget {
             width: 40, height: 4,
             margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
-              color: BeatColors.textSecondary.withOpacity(0.3),
+              color: BeatColors.textSecondary.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -406,7 +406,7 @@ class _GameOverSheet extends StatelessWidget {
               fontWeight: FontWeight.w700,
               color: BeatColors.energy,
               shadows: [Shadow(
-                color: BeatColors.energy.withOpacity(0.5),
+                color: BeatColors.energy.withValues(alpha: 0.5),
                 blurRadius: 16,
               )],
             ),
@@ -486,11 +486,11 @@ class _GlowButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [color, color.withOpacity(0.7)],
+            colors: [color, color.withValues(alpha: 0.7)],
           ),
           borderRadius: BorderRadius.circular(999),
           boxShadow: [
-            BoxShadow(color: color.withOpacity(0.45), blurRadius: 20, spreadRadius: 2),
+            BoxShadow(color: color.withValues(alpha: 0.45), blurRadius: 20, spreadRadius: 2),
           ],
         ),
         child: Center(

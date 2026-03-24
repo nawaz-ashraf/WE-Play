@@ -18,11 +18,6 @@ const _gameData = {
     Icons.visibility_off_rounded
   ),
   'glow_merge': ('Glow Merge', WePlayColors.primary, Icons.blur_on_rounded),
-  'flick_royale': (
-    'Flick Royale',
-    WePlayColors.teal,
-    Icons.sports_hockey_rounded
-  ),
 };
 
 /// Generic game placeholder screen — used for all 5 games initially

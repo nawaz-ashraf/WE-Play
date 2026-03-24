@@ -78,14 +78,14 @@ class ProfileScreen extends StatelessWidget {
               // Stats grid
               Row(
                 children: [
-                  _StatCard(
+                  const _StatCard(
                     label: 'games played',
                     value: '127',
                     icon: Icons.videogame_asset_rounded,
                     color: WePlayColors.primary,
                   ),
                   const SizedBox(width: 12),
-                  _StatCard(
+                  const _StatCard(
                     label: 'win streak',
                     value: '5 🔥',
                     icon: Icons.local_fire_department_rounded,
@@ -96,14 +96,14 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 12),
               Row(
                 children: [
-                  _StatCard(
+                  const _StatCard(
                     label: 'best combo',
                     value: '48x',
                     icon: Icons.bolt_rounded,
                     color: WePlayColors.amber,
                   ),
                   const SizedBox(width: 12),
-                  _StatCard(
+                   const _StatCard(
                     label: 'login streak',
                     value: '5 days',
                     icon: Icons.calendar_today_rounded,

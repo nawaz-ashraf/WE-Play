@@ -19,8 +19,7 @@ import 'package:flutter/material.dart'
         StrokeCap,
         TextStyle,
         Offset,
-        Path,
-        Shadow;
+        Path;
 import 'heist_styles.dart';
 
 // ─────────────────────────────────────────────
@@ -63,7 +62,7 @@ class GridMap extends PositionComponent {
             canvas.drawCircle(
               Offset(c * cs + cs / 2, r * cs + cs / 2),
               1.0,
-              Paint()..color = HeistColors.cellWallEdge.withOpacity(0.4),
+              Paint()..color = HeistColors.cellWallEdge.withValues(alpha: 0.4),
             );
             break;
         }
@@ -102,14 +101,14 @@ class ThiefSprite extends PositionComponent {
 
   @override
   void render(Canvas canvas) {
-    final r = HeistConst.thiefSize / 2;
+    const r = HeistConst.thiefSize / 2;
 
     // Glow
     canvas.drawCircle(
       Offset.zero,
       r + 6,
       Paint()
-        ..color = (hasLoot ? HeistColors.warn : HeistColors.cellThief).withOpacity(0.3)
+        ..color = (hasLoot ? HeistColors.warn : HeistColors.cellThief).withValues(alpha: 0.3)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10),
     );
 
@@ -130,7 +129,7 @@ class ThiefSprite extends PositionComponent {
     );
 
     // Eyes
-    final eyeY = -2.0;
+    const eyeY = -2.0;
     canvas.drawCircle(Offset(-4, eyeY), 2.5, Paint()..color = Colors.white);
     canvas.drawCircle(Offset(4,  eyeY), 2.5, Paint()..color = Colors.white);
     canvas.drawCircle(Offset(-4, eyeY), 1.2, Paint()..color = Colors.black);
@@ -177,14 +176,14 @@ class LootItem extends PositionComponent {
   void render(Canvas canvas) {
     if (collected) return;
     final glow = 0.4 + sin(_pulse) * 0.25;
-    final s    = HeistConst.lootSize;
+    const s    = HeistConst.lootSize;
 
     // Glow
     canvas.drawCircle(
       Offset.zero,
       s,
       Paint()
-        ..color = HeistColors.cellLoot.withOpacity(glow * 0.5)
+        ..color = HeistColors.cellLoot.withValues(alpha: glow * 0.5)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 14),
     );
 
@@ -241,7 +240,7 @@ class LootItem extends PositionComponent {
             acceleration: Vector2(0, 100),
             child: CircleParticle(
               radius: 3,
-              paint: Paint()..color = HeistColors.cellLoot.withOpacity(0.9),
+              paint: Paint()..color = HeistColors.cellLoot.withValues(alpha: 0.9),
             ),
           );
         },
@@ -276,14 +275,14 @@ class ExitDoor extends PositionComponent {
   void render(Canvas canvas) {
     final glow = active ? 0.5 + sin(_pulse) * 0.3 : 0.15 + sin(_pulse) * 0.05;
     final s    = cs * 0.45;
-    final color = active ? HeistColors.cellExit : HeistColors.cellExit.withOpacity(0.35);
+    final color = active ? HeistColors.cellExit : HeistColors.cellExit.withValues(alpha: 0.35);
 
     // Glow ring
     canvas.drawCircle(
       Offset.zero,
       s + 8,
       Paint()
-        ..color = color.withOpacity(glow * 0.4)
+        ..color = color.withValues(alpha: glow * 0.4)
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12),
     );
 
@@ -293,7 +292,7 @@ class ExitDoor extends PositionComponent {
         Rect.fromCenter(center: Offset.zero, width: s * 1.5, height: s * 1.8),
         Radius.circular(s * 0.4),
       ),
-      Paint()..color = color.withOpacity(active ? 1.0 : 0.3),
+      Paint()..color = color.withValues(alpha: active ? 1.0 : 0.3),
     );
 
     // Arrow
@@ -450,7 +449,7 @@ class BustedFlash extends PositionComponent {
   void render(Canvas canvas) {
     canvas.drawRect(
       Rect.fromLTWH(0, 0, screenW, screenH),
-      Paint()..color = HeistColors.energy.withOpacity(_opacity.clamp(0, 0.7)),
+      Paint()..color = HeistColors.energy.withValues(alpha: _opacity.clamp(0, 0.7)),
     );
   }
 }

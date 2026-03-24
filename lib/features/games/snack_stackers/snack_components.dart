@@ -87,12 +87,12 @@ class FoodBody extends BodyComponent {
 
     // Glow
     final glowPaint = Paint()
-      ..color = (isDead ? Colors.red : config.border).withOpacity(isDangerouslyTilted ? 0.6 : 0.25)
+      ..color = (isDead ? Colors.red : config.border).withValues(alpha: isDangerouslyTilted ? 0.6 : 0.25)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 0.25);
     canvas.drawRRect(rrect, glowPaint);
 
     // Fill
-    canvas.drawRRect(rrect, Paint()..color = isDead ? Colors.grey.withOpacity(0.3) : config.color);
+    canvas.drawRRect(rrect, Paint()..color = isDead ? Colors.grey.withValues(alpha: 0.3) : config.color);
 
     // Border
     canvas.drawRRect(
@@ -151,7 +151,7 @@ class StackPlatform extends BodyComponent {
 
     // Glow
     final glowPaint = Paint()
-      ..color = StackColors.platformEdge.withOpacity(0.35)
+      ..color = StackColors.platformEdge.withValues(alpha: 0.35)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 0.35);
     canvas.drawRect(
       Rect.fromCenter(center: Offset.zero, width: w + 0.4, height: h + 0.2),
@@ -217,7 +217,7 @@ class Dropper extends PositionComponent {
     // Shadow under item
     canvas.drawOval(
       Rect.fromCenter(center: Offset(0, h / 2 + 4), width: w * 0.8, height: 8),
-      Paint()..color = Colors.black.withOpacity(0.3),
+      Paint()..color = Colors.black.withValues(alpha: 0.3),
     );
 
     // Item preview
@@ -225,7 +225,7 @@ class Dropper extends PositionComponent {
     final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(8));
 
     final glowPaint = Paint()
-      ..color = config.border.withOpacity(0.4)
+      ..color = config.border.withValues(alpha: 0.4)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 12);
     canvas.drawRRect(rrect, glowPaint);
     canvas.drawRRect(rrect, Paint()..color = config.color);
@@ -245,7 +245,7 @@ class Dropper extends PositionComponent {
 
     // Drop indicator line
     final linePaint = Paint()
-      ..color = config.border.withOpacity(0.2)
+      ..color = config.border.withValues(alpha: 0.2)
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
     canvas.drawLine(Offset(0, h / 2 + 8), const Offset(0, 800), linePaint);

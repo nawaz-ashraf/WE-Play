@@ -1,0 +1,100 @@
+Analyzing WE Play...                                            
+
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes • lib/features/auth/auth_screen.dart:59:33 • prefer_const_literals_to_create_immutables
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_components.dart:41:24 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_components.dart:77:30 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_components.dart:122:61 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_components.dart:133:52 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_components.dart:165:49 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_components.dart:222:21 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_components.dart:225:25 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_components.dart:259:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_components.dart:295:30 • deprecated_member_use
+   info • Use 'const' with the constructor to improve performance • lib/features/games/beat_crash/beat_crash_screen.dart:103:17 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/games/beat_crash/beat_crash_screen.dart:105:26 • prefer_const_constructors
+   info • Unnecessary braces in a string interpolation • lib/features/games/beat_crash/beat_crash_screen.dart:163:24 • unnecessary_brace_in_string_interps
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_screen.dart:189:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_screen.dart:204:49 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_screen.dart:325:34 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_screen.dart:327:53 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_screen.dart:386:47 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_screen.dart:409:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_screen.dart:489:35 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/beat_crash/beat_crash_screen.dart:493:36 • deprecated_member_use
+   info • Statements in a for should be enclosed in a block • lib/features/games/glow_merge/glow_merge_logic.dart:92:42 • curly_braces_in_flow_control_structures
+   info • Statements in a for should be enclosed in a block • lib/features/games/glow_merge/glow_merge_logic.dart:103:42 • curly_braces_in_flow_control_structures
+   info • Statements in a for should be enclosed in a block • lib/features/games/glow_merge/glow_merge_logic.dart:114:42 • curly_braces_in_flow_control_structures
+   info • Statements in a for should be enclosed in a block • lib/features/games/glow_merge/glow_merge_logic.dart:125:42 • curly_braces_in_flow_control_structures
+warning • The value of the field '_displayedScore' isn't used • lib/features/games/glow_merge/glow_merge_screen.dart:27:7 • unused_field
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/glow_merge/glow_merge_screen.dart:125:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/glow_merge/glow_merge_screen.dart:163:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/glow_merge/glow_merge_screen.dart:215:60 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/glow_merge/glow_merge_screen.dart:308:33 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/glow_merge/glow_merge_screen.dart:361:33 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/glow_merge/glow_merge_screen.dart:406:47 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/glow_merge/glow_merge_screen.dart:428:57 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/glow_merge/glow_merge_screen.dart:518:35 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/glow_merge/glow_merge_screen.dart:522:36 • deprecated_member_use
+warning • The name Shadow is shown, but isn't used • lib/features/games/micro_heist/heist_components.dart:23:9 • unused_shown_name
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_components.dart:66:57 • deprecated_member_use
+   info • Use 'const' for final variables initialized to a constant value • lib/features/games/micro_heist/heist_components.dart:105:5 • prefer_const_declarations
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_components.dart:112:72 • deprecated_member_use
+   info • Use 'const' for final variables initialized to a constant value • lib/features/games/micro_heist/heist_components.dart:133:5 • prefer_const_declarations
+   info • Use 'const' for final variables initialized to a constant value • lib/features/games/micro_heist/heist_components.dart:180:5 • prefer_const_declarations
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_components.dart:187:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_components.dart:244:60 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_components.dart:279:72 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_components.dart:286:25 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_components.dart:296:30 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_components.dart:453:43 • deprecated_member_use
+   info • Use 'const' for final variables initialized to a constant value • lib/features/games/micro_heist/heist_game.dart:56:5 • prefer_const_declarations
+   info • Use 'const' for final variables initialized to a constant value • lib/features/games/micro_heist/heist_game.dart:57:5 • prefer_const_declarations
+   info • Statements in an if should be enclosed in a block • lib/features/games/micro_heist/heist_game.dart:162:61 • curly_braces_in_flow_control_structures
+warning • The value of the field '_swipeStart' isn't used • lib/features/games/micro_heist/heist_screen.dart:28:11 • unused_field
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:137:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:139:61 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:234:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:252:56 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:255:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:275:49 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:304:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:324:50 • deprecated_member_use
+   info • Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check • lib/features/games/micro_heist/heist_screen.dart:398:7 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check • lib/features/games/micro_heist/heist_screen.dart:440:7 • use_build_context_synchronously
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:483:57 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:508:22 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:510:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:560:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:585:24 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:662:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/micro_heist/heist_screen.dart:666:30 • deprecated_member_use
+   info • Use 'const' with the constructor to improve performance • lib/features/games/snack_stackers/snack_components.dart:86:49 • prefer_const_constructors
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_components.dart:90:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_components.dart:95:67 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_components.dart:154:42 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_components.dart:220:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_components.dart:228:31 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_components.dart:248:31 • deprecated_member_use
+   info • The import of 'package:flame/components.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flame_forge2d/flame_forge2d.dart' • lib/features/games/snack_stackers/snack_game.dart:1:8 • unnecessary_import
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:126:35 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:128:54 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:219:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:239:50 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:316:22 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:318:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:346:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:349:55 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:409:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:432:44 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:510:58 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/games/snack_stackers/snack_screen.dart:513:36 • deprecated_member_use
+   info • Use 'const' with the constructor to improve performance • lib/features/profile/profile_screen.dart:79:15 • prefer_const_constructors
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes • lib/features/profile/profile_screen.dart:80:27 • prefer_const_literals_to_create_immutables
+   info • Use 'const' with the constructor to improve performance • lib/features/profile/profile_screen.dart:81:19 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/profile/profile_screen.dart:88:19 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/profile/profile_screen.dart:97:15 • prefer_const_constructors
+   info • Use 'const' literals as arguments to constructors of '@immutable' classes • lib/features/profile/profile_screen.dart:98:27 • prefer_const_literals_to_create_immutables
+   info • Use 'const' with the constructor to improve performance • lib/features/profile/profile_screen.dart:99:19 • prefer_const_constructors
+   info • Use 'const' with the constructor to improve performance • lib/features/profile/profile_screen.dart:106:19 • prefer_const_constructors
+
+96 issues found. (ran in 2.4s)

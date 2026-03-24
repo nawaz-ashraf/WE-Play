@@ -11,7 +11,6 @@ import 'package:we_play/features/games/glow_merge/glow_merge_screen.dart';
 import 'package:we_play/features/games/beat_crash/beat_crash_screen.dart';
 import 'package:we_play/features/games/snack_stackers/snack_screen.dart';
 import 'package:we_play/features/games/micro_heist/heist_screen.dart';
-import 'package:we_play/features/games/flick_royale/flick_screen.dart';
 import 'package:we_play/features/games/flappy_bird/flappy_screen.dart';
 import 'package:we_play/features/games/memory_puzzle/memory_screen.dart';
 import 'package:we_play/features/games/snake_game/snake_screen.dart';
@@ -129,10 +128,6 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: 'game/micro_heist',
               builder: (context, state) => const MicroHeistScreen(),
-            ),
-            GoRoute(
-              path: 'game/flick_royale',
-              builder: (context, state) => const FlickRoyaleScreen(),
             ),
             GoRoute(
               path: 'game/flappy_bird',

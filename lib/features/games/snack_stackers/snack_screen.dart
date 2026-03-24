@@ -123,9 +123,9 @@ class _SnackStackersScreenState extends ConsumerState<SnackStackersScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 6),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: StackColors.energy.withOpacity(0.15),
+        color: StackColors.energy.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: StackColors.energy.withOpacity(0.5)),
+        border: Border.all(color: StackColors.energy.withValues(alpha: 0.5)),
       ),
       child: const Row(
         mainAxisSize: MainAxisSize.min,
@@ -216,7 +216,7 @@ class _SnackStackersScreenState extends ConsumerState<SnackStackersScreen> {
   // ── Start Overlay ─────────────────────────
   Widget _buildStartOverlay() {
     return Container(
-      color: StackColors.background.withOpacity(0.88),
+      color: StackColors.background.withValues(alpha: 0.88),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -236,7 +236,7 @@ class _SnackStackersScreenState extends ConsumerState<SnackStackersScreen> {
                 letterSpacing: 2,
                 shadows: [
                   Shadow(
-                      color: StackColors.primary.withOpacity(0.6),
+                      color: StackColors.primary.withValues(alpha: 0.6),
                       blurRadius: 20),
                 ],
               ),
@@ -313,9 +313,9 @@ class _TimerChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: color.withOpacity(0.4)),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Text(
         '${timeLeft.ceil()}s',
@@ -343,10 +343,10 @@ class _CoinChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFD740).withOpacity(0.12),
+        color: const Color(0xFFFFD740).withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(999),
         border:
-            Border.all(color: const Color(0xFFFFD740).withOpacity(0.4)),
+            Border.all(color: const Color(0xFFFFD740).withValues(alpha: 0.4)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -406,7 +406,7 @@ class _GameOverSheet extends StatelessWidget {
             width: 40, height: 4,
             margin: const EdgeInsets.only(bottom: 20),
             decoration: BoxDecoration(
-              color: StackColors.textSecondary.withOpacity(0.3),
+              color: StackColors.textSecondary.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -429,7 +429,7 @@ class _GameOverSheet extends StatelessWidget {
               fontWeight: FontWeight.w700,
               color: StackColors.primary,
               shadows: [Shadow(
-                color: StackColors.primary.withOpacity(0.5),
+                color: StackColors.primary.withValues(alpha: 0.5),
                 blurRadius: 16,
               )],
             ),
@@ -507,10 +507,10 @@ class _GlowButton extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [color, color.withOpacity(0.7)]),
+          gradient: LinearGradient(colors: [color, color.withValues(alpha: 0.7)]),
           borderRadius: BorderRadius.circular(999),
           boxShadow: [
-            BoxShadow(color: color.withOpacity(0.45), blurRadius: 20, spreadRadius: 2),
+            BoxShadow(color: color.withValues(alpha: 0.45), blurRadius: 20, spreadRadius: 2),
           ],
         ),
         child: Center(

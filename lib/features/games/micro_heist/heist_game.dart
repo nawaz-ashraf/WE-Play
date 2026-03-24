@@ -157,10 +157,16 @@ class MicroHeistGame extends FlameGame
   @override
   void update(double dt) {
     super.update(dt);
-    if (!_started || _busted) return;
+    if (!_started || _busted) {
+      return;
+    }
     if (notifier.currentStatus == HeistStatus.busted ||
-        notifier.currentStatus == HeistStatus.gameComplete) return;
-    if (notifier.currentStatus == HeistStatus.levelComplete) return;
+        notifier.currentStatus == HeistStatus.gameComplete) {
+      return;
+    }
+    if (notifier.currentStatus == HeistStatus.levelComplete) {
+      return;
+    }
 
     _post(() => notifier.tick(dt));
     _checkLaserCollision();
@@ -186,7 +192,9 @@ class MicroHeistGame extends FlameGame
   }
 
   void _triggerBusted() {
-    if (_busted) return;
+    if (_busted) {
+      return;
+    }
     _busted = true;
     HapticFeedback.heavyImpact();
     add(BustedFlash(screenW: _screenW, screenH: _screenH));
@@ -206,8 +214,12 @@ class MicroHeistGame extends FlameGame
   // ── Movement: tap ─────────────────────────
   @override
   void onTapDown(TapDownEvent event) {
-    if (!_started || _busted) return;
-    if (notifier.currentStatus != HeistStatus.playing) return;
+    if (!_started || _busted) {
+      return;
+    }
+    if (notifier.currentStatus != HeistStatus.playing) {
+      return;
+    }
 
     final tapX = event.localPosition.x;
     final tapY = event.localPosition.y;
@@ -229,8 +241,12 @@ class MicroHeistGame extends FlameGame
   // ── Movement: keyboard (debug / tablet) ──
   @override
   KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event is! KeyDownEvent) return KeyEventResult.ignored;
-    if (!_started || _busted) return KeyEventResult.ignored;
+    if (event is! KeyDownEvent) {
+      return KeyEventResult.ignored;
+    }
+    if (!_started || _busted) {
+      return KeyEventResult.ignored;
+    }
 
     if (event.logicalKey == LogicalKeyboardKey.arrowUp)    _tryMove(-1, 0);
     if (event.logicalKey == LogicalKeyboardKey.arrowDown)  _tryMove(1, 0);
@@ -240,19 +256,29 @@ class MicroHeistGame extends FlameGame
   }
 
   void _tryMove(int dr, int dc) {
-    if (_moving) return;
+    if (_moving) {
+      return;
+    }
     final nr = _thiefRow + dr;
     final nc = _thiefCol + dc;
 
     // Bounds check
-    if (nr < 0 || nr >= HeistConst.rows) return;
-    if (nc < 0 || nc >= HeistConst.cols) return;
+    if (nr < 0 || nr >= HeistConst.rows) {
+      return;
+    }
+    if (nc < 0 || nc >= HeistConst.cols) {
+      return;
+    }
 
     // Pad short rows
-    if (nc >= _cells[nr].length) return;
+    if (nc >= _cells[nr].length) {
+      return;
+    }
 
     // Wall check
-    if (_cells[nr][nc] == CellType.wall) return;
+    if (_cells[nr][nc] == CellType.wall) {
+      return;
+    }
 
     _thiefRow = nr;
     _thiefCol = nc;
