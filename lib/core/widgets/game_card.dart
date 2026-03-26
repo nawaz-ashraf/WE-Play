@@ -57,6 +57,7 @@ class _GameCardState extends State<GameCard>
 
   @override
   Widget build(BuildContext context) {
+    final surfaceColor = Theme.of(context).colorScheme.surface;
     return GestureDetector(
       onTap: () {
         HapticFeedback.mediumImpact();
@@ -83,20 +84,22 @@ class _GameCardState extends State<GameCard>
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: WePlayColors.surface,
+            color: surfaceColor,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
               color: widget.accentColor.withAlpha(40),
               width: 1,
             ),
           ),
-          child: widget.isWide ? _buildWideLayout() : _buildCompactLayout(),
+          child: widget.isWide ? _buildWideLayout(context) : _buildCompactLayout(context),
         ),
       ),
     );
   }
 
-  Widget _buildCompactLayout() {
+  Widget _buildCompactLayout(BuildContext context) {
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final subtleText = onSurface.withAlpha(140);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -128,7 +131,7 @@ class _GameCardState extends State<GameCard>
           style: GoogleFonts.nunito(
             fontSize: 16,
             fontWeight: FontWeight.w800,
-            color: WePlayColors.textPrimary,
+            color: onSurface,
           ),
         ),
         const SizedBox(height: 2),
@@ -136,7 +139,7 @@ class _GameCardState extends State<GameCard>
           widget.description,
           style: GoogleFonts.nunito(
             fontSize: 11,
-            color: WePlayColors.textSecondary,
+            color: subtleText,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -171,7 +174,9 @@ class _GameCardState extends State<GameCard>
     );
   }
 
-  Widget _buildWideLayout() {
+  Widget _buildWideLayout(BuildContext context) {
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    final subtleText = onSurface.withAlpha(140);
     return Row(
       children: [
         // Icon
@@ -201,7 +206,7 @@ class _GameCardState extends State<GameCard>
                 style: GoogleFonts.nunito(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: WePlayColors.textPrimary,
+                  color: onSurface,
                 ),
               ),
               const SizedBox(height: 2),
@@ -209,7 +214,7 @@ class _GameCardState extends State<GameCard>
                 widget.description,
                 style: GoogleFonts.nunito(
                   fontSize: 12,
-                  color: WePlayColors.textSecondary,
+                  color: subtleText,
                 ),
               ),
             ],

@@ -170,4 +170,151 @@ class WePlayTheme {
       ),
     );
   }
+  static ThemeData get light {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: const Color(0xFFF5F5FA), // Light grey background
+      colorScheme: const ColorScheme.light(
+        primary: WePlayColors.primary,
+        secondary: WePlayColors.secondary,
+        surface: Colors.white,
+        error: WePlayColors.energy,
+        onPrimary: Colors.white,
+        onSecondary: Colors.black,
+        onSurface: Color(0xFF13131F),
+        onError: Colors.white,
+      ),
+      cardTheme: CardThemeData(
+        color: Colors.white,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: WePlayColors.primary.withAlpha(20),
+            width: 1,
+          ),
+        ),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: true,
+        titleTextStyle: GoogleFonts.orbitron(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF13131F),
+        ),
+        iconTheme: const IconThemeData(color: Color(0xFF13131F)),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: WePlayColors.primary,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          textStyle: GoogleFonts.nunito(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: WePlayColors.primary,
+          textStyle: GoogleFonts.nunito(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Colors.white,
+        selectedItemColor: WePlayColors.primary,
+        unselectedItemColor: WePlayColors.textSecondary,
+        type: BottomNavigationBarType.fixed,
+        elevation: 0,
+      ),
+      textTheme: TextTheme(
+        displayLarge: GoogleFonts.orbitron(
+          fontSize: 48,
+          fontWeight: FontWeight.w900,
+          color: const Color(0xFF13131F),
+        ),
+        displayMedium: GoogleFonts.orbitron(
+          fontSize: 36,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF13131F),
+        ),
+        displaySmall: GoogleFonts.orbitron(
+          fontSize: 28,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF13131F),
+        ),
+        headlineLarge: GoogleFonts.orbitron(
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF13131F),
+        ),
+        headlineMedium: GoogleFonts.orbitron(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF13131F),
+        ),
+        headlineSmall: GoogleFonts.orbitron(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF13131F),
+        ),
+        titleLarge: GoogleFonts.nunito(
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF13131F),
+        ),
+        titleMedium: GoogleFonts.nunito(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF13131F),
+        ),
+        titleSmall: GoogleFonts.nunito(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: const Color(0xFF13131F),
+        ),
+        bodyLarge: GoogleFonts.nunito(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xFF13131F),
+        ),
+        bodyMedium: GoogleFonts.nunito(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: const Color(0xFF13131F),
+        ),
+        bodySmall: GoogleFonts.nunito(
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          color: WePlayColors.textSecondary,
+        ),
+        labelLarge: GoogleFonts.nunito(
+          fontSize: 14,
+          fontWeight: FontWeight.w700,
+          color: const Color(0xFF13131F),
+        ),
+        labelMedium: GoogleFonts.nunito(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: WePlayColors.textSecondary,
+        ),
+        labelSmall: GoogleFonts.nunito(
+          fontSize: 10,
+          fontWeight: FontWeight.w500,
+          color: WePlayColors.textSecondary,
+        ),
+      ),
+    );
+  }
 }

@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'memory_provider.dart';
 import 'memory_styles.dart';
 import 'memory_widgets.dart';
+import 'package:we_play/core/providers/coin_provider.dart';
+import 'package:we_play/core/providers/user_stats_provider.dart';
 
 // ─────────────────────────────────────────────
 //  MEMORY PUZZLE SCREEN
@@ -414,6 +416,12 @@ class _MemoryPuzzleScreenState extends ConsumerState<MemoryPuzzleScreen> {
         },
       ),
     );
+
+    // Award coins and track games played
+    if (state.coins > 0) {
+      ref.read(coinNotifierProvider.notifier).earnCoins(state.coins);
+    }
+    ref.read(userStatsProvider.notifier).incrementGamesPlayed();
   }
 }
 

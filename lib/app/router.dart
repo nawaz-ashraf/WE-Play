@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:we_play/features/auth/splash_screen.dart';
 import 'package:we_play/features/auth/auth_screen.dart';
 import 'package:we_play/features/lobby/lobby_screen.dart';
-import 'package:we_play/features/leaderboard/leaderboard_screen.dart';
 import 'package:we_play/features/store/store_screen.dart';
 import 'package:we_play/features/profile/profile_screen.dart';
 import 'package:we_play/features/games/game_screen.dart';
@@ -30,7 +29,6 @@ class _AppShellState extends State<AppShell> {
 
   static const _tabs = [
     '/lobby',
-    '/leaderboard',
     '/store',
     '/profile',
   ];
@@ -70,11 +68,6 @@ class _AppShellState extends State<AppShell> {
               icon: Icon(Icons.home_rounded),
               activeIcon: Icon(Icons.home_rounded),
               label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.leaderboard_rounded),
-              activeIcon: Icon(Icons.leaderboard_rounded),
-              label: 'Ranks',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.storefront_rounded),
@@ -149,10 +142,7 @@ final GoRouter appRouter = GoRouter(
             ),
           ],
         ),
-        GoRoute(
-          path: '/leaderboard',
-          builder: (context, state) => const LeaderboardScreen(),
-        ),
+
         GoRoute(
           path: '/store',
           builder: (context, state) => const StoreScreen(),

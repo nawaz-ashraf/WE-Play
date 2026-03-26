@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'snake_game.dart';
 import 'snake_provider.dart';
 import 'snake_styles.dart';
+import 'package:we_play/core/providers/coin_provider.dart';
+import 'package:we_play/core/providers/user_stats_provider.dart';
 
 // ─────────────────────────────────────────────
 //  SNAKE SCREEN
@@ -348,6 +350,12 @@ class _SnakeGameScreenState extends ConsumerState<SnakeGameScreen> {
         },
       ),
     );
+
+    // Award coins and track games played
+    if (state.coins > 0) {
+      ref.read(coinNotifierProvider.notifier).earnCoins(state.coins);
+    }
+    ref.read(userStatsProvider.notifier).incrementGamesPlayed();
   }
 }
 

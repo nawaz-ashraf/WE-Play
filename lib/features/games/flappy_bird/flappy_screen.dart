@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'flappy_game.dart';
 import 'flappy_provider.dart';
 import 'flappy_styles.dart';
+import 'package:we_play/core/providers/coin_provider.dart';
+import 'package:we_play/core/providers/user_stats_provider.dart';
 
 // ─────────────────────────────────────────────
 //  FLAPPY BIRD SCREEN
@@ -247,6 +249,12 @@ class _FlappyBirdScreenState extends ConsumerState<FlappyBirdScreen> {
         },
       ),
     );
+
+    // Award coins and track games played
+    if (state.coins > 0) {
+      ref.read(coinNotifierProvider.notifier).earnCoins(state.coins);
+    }
+    ref.read(userStatsProvider.notifier).incrementGamesPlayed();
   }
 }
 

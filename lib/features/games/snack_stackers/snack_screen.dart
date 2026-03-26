@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'snack_game.dart';
 import 'snack_provider.dart';
 import 'snack_styles.dart';
-import '../glow_merge/coin_service.dart';
+import '../../../../core/providers/coin_provider.dart';
+import 'package:we_play/core/providers/user_stats_provider.dart';
 
 // ─────────────────────────────────────────────
 //  SNACK STACKERS SCREEN
@@ -292,8 +293,8 @@ class _SnackStackersScreenState extends ConsumerState<SnackStackersScreen> {
     );
 
     // Award coins after sheet shown
-    final coinService = CoinService();
-    await coinService.awardCoins(state.coins);
+    ref.read(coinNotifierProvider.notifier).earnCoins(state.coins);
+    ref.read(userStatsProvider.notifier).incrementGamesPlayed();
   }
 }
 

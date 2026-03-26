@@ -1,183 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:we_play/app/theme.dart';
 import 'package:we_play/core/widgets/coin_display.dart';
 import 'package:we_play/core/widgets/game_card.dart';
+import 'package:we_play/core/providers/game_unlock_provider.dart';
+import 'package:we_play/core/providers/update_provider.dart';
+import 'package:we_play/core/widgets/update_popup.dart';
 
-/// Game metadata for lobby display
-class _GameInfo {
-  final String id;
-  final String name;
-  final String description;
-  final IconData icon;
-  final Color accentColor;
-  final int highScore;
-  final int playerCount;
 
-  const _GameInfo({
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.icon,
-    required this.accentColor,
-    this.highScore = 0,
-    this.playerCount = 0,
-  });
-}
 
-const _games = [
-  _GameInfo(
-    id: 'beat_crash',
-    name: 'Beat Crash',
-    description: 'rhythm tap madness',
-    icon: Icons.music_note_rounded,
-    accentColor: WePlayColors.energy,
-    highScore: 12400,
-    playerCount: 842,
-  ),
-  _GameInfo(
-    id: 'snack_stackers',
-    name: 'Snack Stackers',
-    description: 'stack it up',
-    icon: Icons.fastfood_rounded,
-    accentColor: WePlayColors.amber,
-    highScore: 850,
-    playerCount: 631,
-  ),
-  _GameInfo(
-    id: 'micro_heist',
-    name: 'Micro Heist',
-    description: 'stealth mode on',
-    icon: Icons.visibility_off_rounded,
-    accentColor: WePlayColors.secondary,
-    highScore: 15,
-    playerCount: 524,
-  ),
-  _GameInfo(
-    id: 'glow_merge',
-    name: 'Glow Merge',
-    description: 'merge the glow',
-    icon: Icons.blur_on_rounded,
-    accentColor: WePlayColors.primary,
-    highScore: 2048,
-    playerCount: 1203,
-  ),
-  _GameInfo(
-    id: 'flappy_bird',
-    name: 'Flappy Bird',
-    description: 'dodge the pipes',
-    icon: Icons.flutter_dash_rounded,
-    accentColor: Color(0xFF7B61FF),
-    highScore: 0,
-    playerCount: 512,
-  ),
-  _GameInfo(
-    id: 'memory_puzzle',
-    name: 'Memory Puzzle',
-    description: 'flip & match',
-    icon: Icons.style_rounded,
-    accentColor: Color(0xFFFF3E6C),
-    highScore: 0,
-    playerCount: 387,
-  ),
-  _GameInfo(
-    id: 'snake_game',
-    name: 'Snake Game',
-    description: 'grow or die',
-    icon: Icons.pest_control_rounded,
-    accentColor: Color(0xFF00F5A0),
-    highScore: 0,
-    playerCount: 745,
-  ),
-];
-
-/// Now Playing banner — horizontal scroll showing top players
-class _NowPlayingBanner extends StatelessWidget {
-  const _NowPlayingBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    final leaders = [
-      ('xXblaze99Xx', '28.4k', WePlayColors.energy),
-      ('neon_queen', '24.1k', WePlayColors.primary),
-      ('sk8r_boi', '21.8k', WePlayColors.secondary),
-      ('vibes.only', '19.2k', WePlayColors.amber),
-      ('ghostt_', '17.5k', WePlayColors.teal),
-    ];
-
-    return SizedBox(
-      height: 60,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: leaders.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 10),
-        itemBuilder: (context, index) {
-          final (name, score, color) = leaders[index];
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            decoration: BoxDecoration(
-              color: color.withAlpha(15),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: color.withAlpha(40)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircleAvatar(
-                  radius: 16,
-                  backgroundColor: color.withAlpha(40),
-                  child: Text(
-                    '${index + 1}',
-                    style: GoogleFonts.orbitron(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: color,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      name,
-                      style: GoogleFonts.nunito(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: WePlayColors.textPrimary,
-                      ),
-                    ),
-                    Text(
-                      score,
-                      style: GoogleFonts.orbitron(
-                        fontSize: 10,
-                        color: color,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
 
 /// Main lobby screen — game selection home
-class LobbyScreen extends StatefulWidget {
+class LobbyScreen extends ConsumerStatefulWidget {
   const LobbyScreen({super.key});
 
   @override
-  State<LobbyScreen> createState() => _LobbyScreenState();
+  ConsumerState<LobbyScreen> createState() => _LobbyScreenState();
 }
 
-class _LobbyScreenState extends State<LobbyScreen>
+class _LobbyScreenState extends ConsumerState<LobbyScreen>
     with TickerProviderStateMixin {
   late AnimationController _logoController;
   late Animation<double> _logoPulse;
@@ -192,6 +35,18 @@ class _LobbyScreenState extends State<LobbyScreen>
     _logoPulse = Tween<double>(begin: 0.95, end: 1.05).animate(
       CurvedAnimation(parent: _logoController, curve: Curves.easeInOut),
     );
+
+    // Check for app update
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final needsUpdate = ref.read(updateProvider);
+        if (needsUpdate) {
+          UpdatePopup.show(context, onSkip: () {
+            ref.read(updateProvider.notifier).markUpdateDismissed();
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -202,8 +57,11 @@ class _LobbyScreenState extends State<LobbyScreen>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final onSurface = theme.colorScheme.onSurface;
+    final subtleText = onSurface.withAlpha(140);
     return Scaffold(
-      backgroundColor: WePlayColors.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -238,7 +96,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                     ),
                     const Spacer(),
                     // Coin count
-                    const CoinDisplay(coins: 1250),
+                    const CoinDisplay(),
                     const SizedBox(width: 10),
                     // Avatar
                     Container(
@@ -299,51 +157,19 @@ class _LobbyScreenState extends State<LobbyScreen>
                         style: GoogleFonts.nunito(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: WePlayColors.textSecondary,
+                          color: subtleText,
                         ),
                       ),
                       const SizedBox(width: 4),
-                      const Icon(Icons.chevron_right_rounded,
-                          color: WePlayColors.textSecondary, size: 16),
+                      Icon(Icons.chevron_right_rounded,
+                          color: subtleText, size: 16),
                     ],
                   ),
                 ),
               ),
             ),
 
-            // "now playing" section header
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 6,
-                      height: 6,
-                      decoration: const BoxDecoration(
-                        color: WePlayColors.secondary,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'now playing',
-                      style: GoogleFonts.nunito(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w700,
-                        color: WePlayColors.textSecondary,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
 
-            // Now playing banner
-            const SliverToBoxAdapter(
-              child: _NowPlayingBanner(),
-            ),
 
             // Games section header
             SliverToBoxAdapter(
@@ -354,7 +180,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                   style: GoogleFonts.nunito(
                     fontSize: 20,
                     fontWeight: FontWeight.w800,
-                    color: WePlayColors.textPrimary,
+                    color: onSurface,
                   ),
                 ),
               ),
@@ -366,147 +192,60 @@ class _LobbyScreenState extends State<LobbyScreen>
               sliver: SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    // First row: Beat Crash + Snack Stackers
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 170,
-                            child: GameCard(
-                              gameId: _games[0].id,
-                              name: _games[0].name,
-                              description: _games[0].description,
-                              icon: _games[0].icon,
-                              accentColor: _games[0].accentColor,
-                              highScore: _games[0].highScore,
-                              playerCount: _games[0].playerCount,
-                              onTap: () =>
-                                  context.push('/lobby/game/beat_crash'),
+                    // Dynamic games grid depending on unlocked games
+                    Builder(builder: (context) {
+                      final unlockedGames = ref.watch(gameUnlockProvider.notifier).lobbyGames;
+                      final List<Widget> rows = [];
+                      for (int i = 0; i < unlockedGames.length; i += 2) {
+                        rows.add(
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: SizedBox(
+                                    height: 170,
+                                    child: GameCard(
+                                      gameId: unlockedGames[i].id,
+                                      name: unlockedGames[i].title,
+                                      description: unlockedGames[i].description,
+                                      icon: unlockedGames[i].icon,
+                                      accentColor: unlockedGames[i].accentColor,
+                                      highScore: 0,
+                                      playerCount: 400 + (unlockedGames[i].title.length * 20),
+                                      onTap: () => context.push('/lobby/game/${unlockedGames[i].id}'),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                if (i + 1 < unlockedGames.length)
+                                  Expanded(
+                                    child: SizedBox(
+                                      height: 170,
+                                      child: GameCard(
+                                        gameId: unlockedGames[i + 1].id,
+                                        name: unlockedGames[i + 1].title,
+                                        description: unlockedGames[i + 1].description,
+                                        icon: unlockedGames[i + 1].icon,
+                                        accentColor: unlockedGames[i + 1].accentColor,
+                                        highScore: 0,
+                                        playerCount: 400 + (unlockedGames[i + 1].title.length * 20),
+                                        onTap: () => context.push('/lobby/game/${unlockedGames[i + 1].id}'),
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  const Expanded(child: SizedBox.shrink()),
+                              ],
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: SizedBox(
-                            height: 170,
-                            child: GameCard(
-                              gameId: _games[1].id,
-                              name: _games[1].name,
-                              description: _games[1].description,
-                              icon: _games[1].icon,
-                              accentColor: _games[1].accentColor,
-                              highScore: _games[1].highScore,
-                              playerCount: _games[1].playerCount,
-                              onTap: () =>
-                                  context.push('/lobby/game/snack_stackers'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Second row: Micro Heist + Glow Merge
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 170,
-                            child: GameCard(
-                              gameId: _games[2].id,
-                              name: _games[2].name,
-                              description: _games[2].description,
-                              icon: _games[2].icon,
-                              accentColor: _games[2].accentColor,
-                              highScore: _games[2].highScore,
-                              playerCount: _games[2].playerCount,
-                              onTap: () =>
-                                  context.push('/lobby/game/micro_heist'),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: SizedBox(
-                            height: 170,
-                            child: GameCard(
-                              gameId: _games[3].id,
-                              name: _games[3].name,
-                              description: _games[3].description,
-                              icon: _games[3].icon,
-                              accentColor: _games[3].accentColor,
-                              highScore: _games[3].highScore,
-                              playerCount: _games[3].playerCount,
-                              onTap: () =>
-                                  context.push('/lobby/game/glow_merge'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Third row: Flappy Bird + Memory Puzzle
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 170,
-                            child: GameCard(
-                              gameId: _games[4].id,
-                              name: _games[4].name,
-                              description: _games[4].description,
-                              icon: _games[4].icon,
-                              accentColor: _games[4].accentColor,
-                              highScore: _games[4].highScore,
-                              playerCount: _games[4].playerCount,
-                              onTap: () =>
-                                  context.push('/lobby/game/flappy_bird'),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: SizedBox(
-                            height: 170,
-                            child: GameCard(
-                              gameId: _games[5].id,
-                              name: _games[5].name,
-                              description: _games[5].description,
-                              icon: _games[5].icon,
-                              accentColor: _games[5].accentColor,
-                              highScore: _games[5].highScore,
-                              playerCount: _games[5].playerCount,
-                              onTap: () =>
-                                  context.push('/lobby/game/memory_puzzle'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    // Fourth row: Snake Game + Mini Golf
-                    Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 170,
-                            child: GameCard(
-                              gameId: _games[6].id,
-                              name: _games[6].name,
-                              description: _games[6].description,
-                              icon: _games[6].icon,
-                              accentColor: _games[6].accentColor,
-                              highScore: _games[6].highScore,
-                              playerCount: _games[6].playerCount,
-                              onTap: () =>
-                                  context.push('/lobby/game/snake_game'),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        const Expanded(child: SizedBox.shrink()),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
+                        );
+                      }
+                      
+                      return Column(
+                        children: rows,
+                      );
+                    }),
                   ],
                 ),
               ),

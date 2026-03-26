@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'heist_game.dart';
 import 'heist_provider.dart';
 import 'heist_styles.dart';
+import '../../../../core/providers/coin_provider.dart';
+import 'package:we_play/core/providers/user_stats_provider.dart';
 import '../glow_merge/coin_service.dart';
 
 // ─────────────────────────────────────────────
@@ -380,9 +382,12 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
   Future<void> _showGameOver(BuildContext ctx, HeistState state) async {
     if (!mounted) return;
 
+    // Award coins locally
+    ref.read(coinNotifierProvider.notifier).earnCoins(state.coins);
+    ref.read(userStatsProvider.notifier).incrementGamesPlayed();
+
     try {
       final coinService = CoinService();
-      await coinService.awardCoins(state.coins);
       await coinService.submitScore(
         gameId: 'micro_heist',
         score: state.score,
@@ -423,9 +428,12 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
   Future<void> _showGameComplete(BuildContext ctx, HeistState state) async {
     if (!mounted) return;
 
+    // Award coins locally
+    ref.read(coinNotifierProvider.notifier).earnCoins(state.coins);
+    ref.read(userStatsProvider.notifier).incrementGamesPlayed();
+
     try {
       final coinService = CoinService();
-      await coinService.awardCoins(state.coins);
       await coinService.submitScore(
         gameId: 'micro_heist',
         score: state.score,

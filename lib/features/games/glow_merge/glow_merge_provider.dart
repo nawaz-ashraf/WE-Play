@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'glow_merge_logic.dart';
-import 'coin_service.dart';
+import '../../../../core/providers/coin_provider.dart';
+import 'package:we_play/core/providers/user_stats_provider.dart';
 
 // ─────────────────────────────────────────────
 //  STATE
@@ -51,8 +52,9 @@ class GlowMergeState {
 // ─────────────────────────────────────────────
 class GlowMergeNotifier extends StateNotifier<GlowMergeState> {
   final GlowMergeEngine _engine = GlowMergeEngine();
+  final Ref ref;
 
-  GlowMergeNotifier()
+  GlowMergeNotifier(this.ref)
       : super(GlowMergeState(
           grid: List.generate(4, (_) => List<Blob?>.filled(4, null)),
         ));
@@ -91,12 +93,8 @@ class GlowMergeNotifier extends StateNotifier<GlowMergeState> {
     );
 
     if (isOver && newCoins > 0) {
-      try {
-        final coinService = CoinService();
-        await coinService.awardCoins(newCoins);
-      } catch (_) {
-        // Firebase not configured yet — coins tracked locally only
-      }
+      ref.read(coinNotifierProvider.notifier).earnCoins(newCoins);
+      ref.read(userStatsProvider.notifier).incrementGamesPlayed();
     }
   }
 
@@ -110,5 +108,5 @@ class GlowMergeNotifier extends StateNotifier<GlowMergeState> {
 // ─────────────────────────────────────────────
 final glowMergeProvider =
     StateNotifierProvider<GlowMergeNotifier, GlowMergeState>(
-  (ref) => GlowMergeNotifier(),
+  (ref) => GlowMergeNotifier(ref),
 );

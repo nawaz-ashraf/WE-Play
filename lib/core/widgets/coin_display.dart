@@ -1,53 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:we_play/app/theme.dart';
+import 'package:we_play/core/providers/coin_provider.dart';
 
 /// Animated coin counter display — shows coin icon + count with count-up animation
-class CoinDisplay extends StatefulWidget {
-  final int coins;
+class CoinDisplay extends ConsumerStatefulWidget {
   final bool compact;
 
   const CoinDisplay({
     super.key,
-    required this.coins,
     this.compact = false,
   });
 
   @override
-  State<CoinDisplay> createState() => _CoinDisplayState();
+  ConsumerState<CoinDisplay> createState() => _CoinDisplayState();
 }
 
-class _CoinDisplayState extends State<CoinDisplay>
+class _CoinDisplayState extends ConsumerState<CoinDisplay>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _countAnimation;
-  int _previousCoins = 0;
 
   @override
   void initState() {
     super.initState();
-    _previousCoins = widget.coins;
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    _countAnimation = Tween<double>(
-      begin: widget.coins.toDouble(),
-      end: widget.coins.toDouble(),
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-  }
-
-  @override
-  void didUpdateWidget(CoinDisplay oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.coins != widget.coins) {
-      _countAnimation = Tween<double>(
-        begin: _previousCoins.toDouble(),
-        end: widget.coins.toDouble(),
-      ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-      _previousCoins = widget.coins;
-      _controller.forward(from: 0);
-    }
+    _countAnimation = const AlwaysStoppedAnimation(0.0);
   }
 
   @override
@@ -61,15 +43,34 @@ class _CoinDisplayState extends State<CoinDisplay>
     final iconSize = widget.compact ? 16.0 : 20.0;
     final fontSize = widget.compact ? 14.0 : 18.0;
 
+    ref.listen<int>(coinNotifierProvider, (previous, next) {
+      if (previous != null && previous != next) {
+        setState(() {
+          _countAnimation = Tween<double>(
+            begin: previous.toDouble(),
+            end: next.toDouble(),
+          ).animate(
+              CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+          _controller.forward(from: 0);
+        });
+      }
+    });
+
+    final currentCoins = ref.watch(coinNotifierProvider);
+    if (!_controller.isAnimating) {
+      _countAnimation = AlwaysStoppedAnimation(currentCoins.toDouble());
+    }
+
+    final theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: widget.compact ? 10 : 14,
         vertical: widget.compact ? 4 : 8,
       ),
       decoration: BoxDecoration(
-        color: WePlayColors.surface,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(50),
-        border: Border.all(color: WePlayColors.cardBorder),
+        border: Border.all(color: theme.dividerColor),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

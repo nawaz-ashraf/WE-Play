@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:we_play/app/theme.dart';
+import 'package:we_play/core/providers/theme_provider.dart';
+import 'package:we_play/core/providers/user_stats_provider.dart';
+import 'package:we_play/core/providers/coin_provider.dart';
 import 'package:we_play/core/widgets/coin_display.dart';
 
-/// Profile screen placeholder
-class ProfileScreen extends StatelessWidget {
+/// Profile screen
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
+    final userStats = ref.watch(userStatsProvider);
+    final isLight = themeMode == ThemeMode.light;
+    final theme = Theme.of(context);
+    final onSurface = theme.colorScheme.onSurface;
+    final surfaceColor = theme.colorScheme.surface;
+    final subtleText = onSurface.withAlpha(140);
+
     return Scaffold(
-      backgroundColor: WePlayColors.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -24,14 +36,18 @@ class ProfileScreen extends StatelessWidget {
                     style: GoogleFonts.orbitron(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
-                      color: WePlayColors.textPrimary,
+                      color: onSurface,
                     ),
                   ),
                   const Spacer(),
                   IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.settings_rounded,
-                        color: WePlayColors.textSecondary),
+                    onPressed: () {
+                      ref.read(themeProvider.notifier).toggleTheme();
+                    },
+                    icon: Icon(
+                      isLight ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                      color: subtleText,
+                    ),
                   ),
                 ],
               ),
@@ -61,7 +77,7 @@ class ProfileScreen extends StatelessWidget {
                 style: GoogleFonts.nunito(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
-                  color: WePlayColors.textPrimary,
+                  color: onSurface,
                 ),
               ),
               const SizedBox(height: 4),
@@ -69,51 +85,154 @@ class ProfileScreen extends StatelessWidget {
                 'level 12 • 4,800 xp',
                 style: GoogleFonts.nunito(
                   fontSize: 13,
-                  color: WePlayColors.textSecondary,
+                  color: subtleText,
                 ),
               ),
               const SizedBox(height: 16),
-              const CoinDisplay(coins: 1250),
+              const CoinDisplay(),
               const SizedBox(height: 32),
               // Stats grid
               Row(
                 children: [
-                  const _StatCard(
+                  _StatCard(
                     label: 'games played',
-                    value: '127',
+                    value: '${userStats.gamesPlayed}',
                     icon: Icons.videogame_asset_rounded,
                     color: WePlayColors.primary,
+                    surfaceColor: surfaceColor,
+                    onSurface: onSurface,
+                    subtleText: subtleText,
                   ),
                   const SizedBox(width: 12),
-                  const _StatCard(
-                    label: 'win streak',
-                    value: '5 🔥',
-                    icon: Icons.local_fire_department_rounded,
-                    color: WePlayColors.energy,
+                  _StatCard(
+                    label: 'login streak',
+                    value: '${userStats.loginStreak} days',
+                    icon: Icons.calendar_today_rounded,
+                    color: WePlayColors.secondary,
+                    surfaceColor: surfaceColor,
+                    onSurface: onSurface,
+                    subtleText: subtleText,
                   ),
                 ],
               ),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  const _StatCard(
-                    label: 'best combo',
-                    value: '48x',
-                    icon: Icons.bolt_rounded,
+                   _StatCard(
+                    label: 'ad coins earned',
+                    value: '${userStats.adCoins}',
+                    icon: Icons.play_circle_fill_rounded,
                     color: WePlayColors.amber,
+                    surfaceColor: surfaceColor,
+                    onSurface: onSurface,
+                    subtleText: subtleText,
                   ),
                   const SizedBox(width: 12),
-                   const _StatCard(
-                    label: 'login streak',
-                    value: '5 days',
-                    icon: Icons.calendar_today_rounded,
-                    color: WePlayColors.secondary,
-                  ),
+                  const Expanded(child: SizedBox.shrink()),
                 ],
+              ),
+
+              const SizedBox(height: 32),
+
+              // ── Watch Ad & Earn Coins ──────────────────
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: surfaceColor,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: WePlayColors.amber.withAlpha(50)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: WePlayColors.amber.withAlpha(15),
+                      blurRadius: 20,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    // Icon header
+                    Container(
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: WePlayColors.amber.withAlpha(20),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.ondemand_video_rounded,
+                        size: 32,
+                        color: WePlayColors.amber,
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      'Watch Ad & Earn Coins',
+                      style: GoogleFonts.orbitron(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: onSurface,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Watch a short video and earn 10 bonus coins!',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.nunito(
+                        fontSize: 13,
+                        color: subtleText,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          // TODO: Replace with RewardedAd.load() for AdMob integration
+                          _simulateAdReward(ref, context);
+                        },
+                        icon: const Icon(Icons.play_arrow_rounded),
+                        label: const Text('WATCH AD  •  +10 🪙'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: WePlayColors.amber,
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          textStyle: GoogleFonts.nunito(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// Simulate watching an ad — replace with actual AdMob RewardedAd later
+  void _simulateAdReward(WidgetRef ref, BuildContext context) {
+    const rewardCoins = 10;
+    ref.read(coinNotifierProvider.notifier).earnCoins(rewardCoins);
+    ref.read(userStatsProvider.notifier).addAdCoins(rewardCoins);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '+$rewardCoins coins earned! 🎉',
+          style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+        ),
+        backgroundColor: WePlayColors.amber,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
@@ -124,12 +243,18 @@ class _StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
+  final Color surfaceColor;
+  final Color onSurface;
+  final Color subtleText;
 
   const _StatCard({
     required this.label,
     required this.value,
     required this.icon,
     required this.color,
+    required this.surfaceColor,
+    required this.onSurface,
+    required this.subtleText,
   });
 
   @override
@@ -138,7 +263,7 @@ class _StatCard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: WePlayColors.surface,
+          color: surfaceColor,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: color.withAlpha(40)),
         ),
@@ -152,7 +277,7 @@ class _StatCard extends StatelessWidget {
               style: GoogleFonts.orbitron(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
-                color: WePlayColors.textPrimary,
+                color: onSurface,
               ),
             ),
             const SizedBox(height: 4),
@@ -160,7 +285,7 @@ class _StatCard extends StatelessWidget {
               label,
               style: GoogleFonts.nunito(
                 fontSize: 11,
-                color: WePlayColors.textSecondary,
+                color: subtleText,
               ),
             ),
           ],

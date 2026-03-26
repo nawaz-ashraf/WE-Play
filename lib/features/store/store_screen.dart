@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:we_play/app/theme.dart';
+import 'package:we_play/core/providers/game_unlock_provider.dart';
+import 'package:we_play/core/models/store_game_model.dart';
+import 'package:we_play/core/widgets/coin_display.dart';
 
-/// Store screen placeholder
-class StoreScreen extends StatelessWidget {
+/// App Store screen
+class StoreScreen extends ConsumerStatefulWidget {
   const StoreScreen({super.key});
 
   @override
+  ConsumerState<StoreScreen> createState() => _StoreScreenState();
+}
+
+class _StoreScreenState extends ConsumerState<StoreScreen> {
+
+  @override
   Widget build(BuildContext context) {
+    // Watch unlock state strictly for reactivity, but access logic through notifier
+    ref.watch(gameUnlockProvider);
+    final notifier = ref.read(gameUnlockProvider.notifier);
+    
+    // Store exclusives
+    final storeGames = GameCatalog.allGames.where((g) => !g.isDefaultGame).toList();
+
+    final theme = Theme.of(context);
+    final onSurface = theme.colorScheme.onSurface;
+    final surfaceColor = theme.colorScheme.surface;
+    final subtleText = onSurface.withAlpha(140);
+
     return Scaffold(
-      backgroundColor: WePlayColors.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -31,47 +53,161 @@ class StoreScreen extends StatelessWidget {
                     style: GoogleFonts.orbitron(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
-                      color: WePlayColors.textPrimary,
+                      color: onSurface,
                     ),
                   ),
+                  const Spacer(),
+                  const CoinDisplay(),
                 ],
               ),
             ),
-            // Coming soon
+            
+            // Available items
             Expanded(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: WePlayColors.amber.withAlpha(20),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.shopping_bag_rounded,
-                          size: 40, color: WePlayColors.amber),
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                itemCount: storeGames.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 16),
+                itemBuilder: (context, index) {
+                  final game = storeGames[index];
+                  final isUnlocked = notifier.isUnlocked(game.id);
+
+                  return Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: surfaceColor,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: game.accentColor.withAlpha(40)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: game.accentColor.withAlpha(10),
+                          blurRadius: 20,
+                          spreadRadius: -5,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'coming soon',
-                      style: GoogleFonts.orbitron(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: WePlayColors.textPrimary,
-                      ),
+                    child: Row(
+                      children: [
+                        // Icon
+                        Container(
+                          width: 56,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            color: game.accentColor.withAlpha(20),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Icon(game.icon, color: game.accentColor, size: 28),
+                        ),
+                        const SizedBox(width: 16),
+                        
+                        // Details
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                game.title,
+                                style: GoogleFonts.orbitron(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: onSurface,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                game.description,
+                                style: GoogleFonts.nunito(
+                                  fontSize: 13,
+                                  color: subtleText,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        
+                        // Action Button
+                        const SizedBox(width: 12),
+                        isUnlocked
+                            ? _buildPurchasedButton()
+                            : _buildBuyButton(game, notifier),
+                      ],
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'skins & power-ups dropping soon 🎨',
-                      style: GoogleFonts.nunito(
-                        fontSize: 14,
-                        color: WePlayColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPurchasedButton() {
+    final subtleText = Theme.of(context).colorScheme.onSurface.withAlpha(140);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: subtleText.withAlpha(20),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: subtleText.withAlpha(40)),
+      ),
+      child: Text(
+        'Unlocked',
+        style: GoogleFonts.nunito(
+          fontSize: 13,
+          fontWeight: FontWeight.w700,
+          color: subtleText,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBuyButton(StoreGameModel game, GameUnlockNotifier notifier) {
+    return GestureDetector(
+      onTap: () async {
+        final success = notifier.buyGame(game.id, game.coinPrice);
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Unlocked ${game.title}! It is now available in the Lobby.'),
+              backgroundColor: WePlayColors.primary,
+            ),
+          );
+        } else {
+           ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Not enough coins to unlock this game.'),
+              backgroundColor: WePlayColors.energy,
+            ),
+          );
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [WePlayColors.amber, WePlayColors.energy],
+          ),
+          borderRadius: BorderRadius.circular(999),
+          boxShadow: [
+            BoxShadow(
+              color: WePlayColors.amber.withAlpha(60),
+              blurRadius: 10,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+             const Icon(Icons.monetization_on_rounded, color: Colors.white, size: 16),
+             const SizedBox(width: 6),
+             Text(
+              game.coinPrice.toString(),
+              style: GoogleFonts.orbitron(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
               ),
             ),
           ],
