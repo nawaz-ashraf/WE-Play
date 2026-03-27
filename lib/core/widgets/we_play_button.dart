@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:we_play/app/theme.dart';
 
-/// Pill-shaped gradient button with haptic feedback — WE PLAY primary CTA
+/// Pill-shaped gradient button with haptic feedback — MiniPlay Hub primary CTA
 class WePlayButton extends StatefulWidget {
   final String label;
   final VoidCallback onPressed;

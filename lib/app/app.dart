@@ -13,7 +13,7 @@ class WePlayApp extends ConsumerWidget {
     final themeMode = ref.watch(themeProvider);
 
     return MaterialApp.router(
-      title: 'WE PLAY',
+      title: 'MiniPlay Hub',
       debugShowCheckedModeBanner: false,
       theme: WePlayTheme.light,
       darkTheme: WePlayTheme.dark,

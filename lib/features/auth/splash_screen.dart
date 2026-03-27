@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>
                     end: Alignment.bottomRight,
                   ).createShader(bounds),
                   child: Text(
-                    'WE PLAY',
+                    'MiniPlay Hub',
                     style: GoogleFonts.orbitron(
                       fontSize: 48,
                       fontWeight: FontWeight.w900,

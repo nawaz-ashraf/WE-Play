@@ -13,6 +13,9 @@ import 'package:we_play/features/games/micro_heist/heist_screen.dart';
 import 'package:we_play/features/games/flappy_bird/flappy_screen.dart';
 import 'package:we_play/features/games/memory_puzzle/memory_screen.dart';
 import 'package:we_play/features/games/snake_game/snake_screen.dart';
+import 'package:we_play/features/games/block_blast/block_blast_screen.dart';
+import 'package:we_play/features/games/wood_block/wood_block_screen.dart';
+import 'package:we_play/features/games/color_switch/color_switch_screen.dart';
 import 'package:we_play/app/theme.dart';
 
 /// Bottom navigation shell for main screens
@@ -132,6 +135,18 @@ final GoRouter appRouter = GoRouter(
             GoRoute(
               path: 'game/snake_game',
               builder: (context, state) => const SnakeGameScreen(),
+            ),
+            GoRoute(
+              path: 'game/block_blast',
+              builder: (context, state) => const BlockBlastScreen(),
+            ),
+            GoRoute(
+              path: 'game/wood_block',
+              builder: (context, state) => const WoodBlockScreen(),
+            ),
+            GoRoute(
+              path: 'game/color_switch',
+              builder: (context, state) => const ColorSwitchScreen(),
             ),
             GoRoute(
               path: 'game/:id',

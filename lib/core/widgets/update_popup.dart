@@ -78,7 +78,7 @@ class UpdatePopup extends StatelessWidget {
             
             // Description
             Text(
-              'A new version of WE PLAY is out with new games and bug fixes. Update now to enhance your experience!',
+              'A new version of MiniPlay Hub is out with new games and bug fixes. Update now to enhance your experience!',
               style: GoogleFonts.nunito(
                 fontSize: 14,
                 color: WePlayColors.textSecondary,

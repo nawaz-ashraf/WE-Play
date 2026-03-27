@@ -25,7 +25,7 @@ class AuthScreen extends StatelessWidget {
                   colors: [WePlayColors.primary, WePlayColors.secondary],
                 ).createShader(bounds),
                 child: Text(
-                  'WE PLAY',
+                  'MiniPlay Hub',
                   style: GoogleFonts.orbitron(
                     fontSize: 40,
                     fontWeight: FontWeight.w900,

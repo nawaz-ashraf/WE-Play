@@ -85,7 +85,7 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
                           end: Alignment.bottomRight,
                         ).createShader(bounds),
                         child: Text(
-                          'WE PLAY',
+                          'MiniPlay Hub',
                           style: GoogleFonts.orbitron(
                             fontSize: 22,
                             fontWeight: FontWeight.w900,

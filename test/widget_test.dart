@@ -5,6 +5,6 @@ void main() {
   testWidgets('WePlayApp renders', (WidgetTester tester) async {
     await tester.pumpWidget(const WePlayApp());
     // App should render without errors
-    expect(find.text('WE PLAY'), findsWidgets);
+    expect(find.text('MiniPlay Hub'), findsWidgets);
   });
 }

@@ -187,7 +187,7 @@ class _MemoryCardWidgetState extends State<MemoryCardWidget>
 }
 
 // ─────────────────────────────────────────────
-//  CARD BACK PAINTER  — WE PLAY logo pattern
+//  CARD BACK PAINTER  — MiniPlay Hub logo pattern
 // ─────────────────────────────────────────────
 class _CardBackPainter extends CustomPainter {
   @override

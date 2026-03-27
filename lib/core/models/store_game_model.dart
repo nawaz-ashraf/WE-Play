@@ -85,10 +85,39 @@ class GameCatalog {
       id: 'snake_game',
       title: 'Snake Game',
       description: 'grow or die',
-      coinPrice: 750, // example price
+      coinPrice: 750,
       isDefaultGame: false,
       icon: Icons.pest_control_rounded,
       accentColor: Color(0xFF00F5A0),
+    ),
+
+    // --- New Premium Games ---
+    StoreGameModel(
+      id: 'block_blast',
+      title: 'Block Blast',
+      description: 'clear the board',
+      coinPrice: 800,
+      isDefaultGame: false,
+      icon: Icons.grid_view_rounded,
+      accentColor: Color(0xFF7B61FF),
+    ),
+    StoreGameModel(
+      id: 'wood_block',
+      title: 'Wood Block',
+      description: 'fit the pieces',
+      coinPrice: 600,
+      isDefaultGame: false,
+      icon: Icons.carpenter_rounded,
+      accentColor: Color(0xFFCD853F),
+    ),
+    StoreGameModel(
+      id: 'color_switch',
+      title: 'Color Switch',
+      description: 'match the color',
+      coinPrice: 500,
+      isDefaultGame: false,
+      icon: Icons.palette_rounded,
+      accentColor: Color(0xFF4FC3F7),
     ),
   ];
 }

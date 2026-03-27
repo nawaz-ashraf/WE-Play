@@ -8,7 +8,7 @@ class ClipService {
     return null;
   }
 
-  /// Add WE PLAY watermark overlay
+  /// Add MiniPlay Hub watermark overlay
   Future<String?> addWatermark(String clipPath, int score) async {
     // TODO: Implement video overlay
     return clipPath;

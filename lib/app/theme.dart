@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/// WE PLAY color palette — dark neon Gen-Z aesthetic
+/// MiniPlay Hub color palette — dark neon Gen-Z aesthetic
 class WePlayColors {
   WePlayColors._();
 
@@ -19,7 +19,7 @@ class WePlayColors {
   static const Color cardGlow = Color(0x337B61FF); // purple glow
 }
 
-/// WE PLAY theme configuration
+/// MiniPlay Hub theme configuration
 class WePlayTheme {
   WePlayTheme._();
 
