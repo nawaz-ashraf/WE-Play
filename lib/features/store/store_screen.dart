@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:we_play/app/theme.dart';
 import 'package:we_play/core/providers/game_unlock_provider.dart';
 import 'package:we_play/core/models/store_game_model.dart';
+import 'package:we_play/core/providers/ad_provider.dart';
 import 'package:we_play/core/widgets/coin_display.dart';
 
 /// App Store screen
@@ -15,6 +17,36 @@ class StoreScreen extends ConsumerStatefulWidget {
 }
 
 class _StoreScreenState extends ConsumerState<StoreScreen> {
+  BannerAd? _bannerAd;
+  bool _isBannerLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Banner ad will be created after first build when ref is available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadBannerAd();
+    });
+  }
+
+  void _loadBannerAd() {
+    final adService = ref.read(adServiceProvider);
+    _bannerAd = adService.createBannerAd(
+      onLoaded: () {
+        if (mounted) setState(() => _isBannerLoaded = true);
+      },
+      onFailed: () {
+        if (mounted) setState(() => _isBannerLoaded = false);
+      },
+    );
+    _bannerAd!.load();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,6 +168,24 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                 },
               ),
             ),
+
+            // ── Banner Ad ────────────────────────────
+            if (_isBannerLoaded && _bannerAd != null)
+              Container(
+                width: double.infinity,
+                height: _bannerAd!.size.height.toDouble(),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: surfaceColor,
+                  border: Border(
+                    top: BorderSide(
+                      color: onSurface.withAlpha(20),
+                      width: 0.5,
+                    ),
+                  ),
+                ),
+                child: AdWidget(ad: _bannerAd!),
+              ),
           ],
         ),
       ),

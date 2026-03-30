@@ -8,6 +8,7 @@ import 'heist_provider.dart';
 import 'heist_styles.dart';
 import '../../../../core/providers/coin_provider.dart';
 import 'package:we_play/core/providers/user_stats_provider.dart';
+import 'package:we_play/core/providers/ad_provider.dart';
 import '../glow_merge/coin_service.dart';
 
 // ─────────────────────────────────────────────
@@ -385,6 +386,7 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
     // Award coins locally
     ref.read(coinNotifierProvider.notifier).earnCoins(state.coins);
     ref.read(userStatsProvider.notifier).incrementGamesPlayed();
+    ref.read(adServiceProvider).showInterstitialIfReady();
 
     try {
       final coinService = CoinService();
@@ -431,6 +433,7 @@ class _MicroHeistScreenState extends ConsumerState<MicroHeistScreen> {
     // Award coins locally
     ref.read(coinNotifierProvider.notifier).earnCoins(state.coins);
     ref.read(userStatsProvider.notifier).incrementGamesPlayed();
+    ref.read(adServiceProvider).showInterstitialIfReady();
 
     try {
       final coinService = CoinService();

@@ -7,6 +7,7 @@ import 'memory_styles.dart';
 import 'memory_widgets.dart';
 import 'package:we_play/core/providers/coin_provider.dart';
 import 'package:we_play/core/providers/user_stats_provider.dart';
+import 'package:we_play/core/providers/ad_provider.dart';
 
 // ─────────────────────────────────────────────
 //  MEMORY PUZZLE SCREEN
@@ -422,6 +423,7 @@ class _MemoryPuzzleScreenState extends ConsumerState<MemoryPuzzleScreen> {
       ref.read(coinNotifierProvider.notifier).earnCoins(state.coins);
     }
     ref.read(userStatsProvider.notifier).incrementGamesPlayed();
+    ref.read(adServiceProvider).showInterstitialIfReady();
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'glow_merge_logic.dart';
 import '../../../../core/providers/coin_provider.dart';
 import 'package:we_play/core/providers/user_stats_provider.dart';
+import 'package:we_play/core/providers/ad_provider.dart';
 
 // ─────────────────────────────────────────────
 //  STATE
@@ -95,6 +96,7 @@ class GlowMergeNotifier extends StateNotifier<GlowMergeState> {
     if (isOver && newCoins > 0) {
       ref.read(coinNotifierProvider.notifier).earnCoins(newCoins);
       ref.read(userStatsProvider.notifier).incrementGamesPlayed();
+      ref.read(adServiceProvider).showInterstitialIfReady();
     }
   }
 

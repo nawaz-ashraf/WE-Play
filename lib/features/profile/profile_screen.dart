@@ -5,6 +5,7 @@ import 'package:we_play/app/theme.dart';
 import 'package:we_play/core/providers/theme_provider.dart';
 import 'package:we_play/core/providers/user_stats_provider.dart';
 import 'package:we_play/core/providers/coin_provider.dart';
+import 'package:we_play/core/providers/ad_provider.dart';
 import 'package:we_play/core/widgets/coin_display.dart';
 
 /// Profile screen
@@ -167,7 +168,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 14),
                     Text(
-                      'Watch Ad & Earn Coins',
+                      'Watch Ads',
                       style: GoogleFonts.orbitron(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
@@ -176,7 +177,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Watch a short video and earn 10 bonus coins!',
+                      'Watch ad for 100 bonus coins',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.nunito(
                         fontSize: 13,
@@ -188,11 +189,10 @@ class ProfileScreen extends ConsumerWidget {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // TODO: Replace with RewardedAd.load() for AdMob integration
-                          _simulateAdReward(ref, context);
+                          _watchRewardedAd(ref, context);
                         },
                         icon: const Icon(Icons.play_arrow_rounded),
-                        label: const Text('WATCH AD  •  +10 🪙'),
+                        label: const Text('WATCH AD  •  +100 🪙'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: WePlayColors.amber,
                           foregroundColor: Colors.black,
@@ -217,23 +217,46 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  /// Simulate watching an ad — replace with actual AdMob RewardedAd later
-  void _simulateAdReward(WidgetRef ref, BuildContext context) {
-    const rewardCoins = 10;
-    ref.read(coinNotifierProvider.notifier).earnCoins(rewardCoins);
-    ref.read(userStatsProvider.notifier).addAdCoins(rewardCoins);
+  /// Show a rewarded ad — awards 100 coins on completion.
+  void _watchRewardedAd(WidgetRef ref, BuildContext context) async {
+    final adService = ref.read(adServiceProvider);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '+$rewardCoins coins earned! 🎉',
-          style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+    if (!adService.isRewardedAdReady) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Ad is loading, please try again in a moment.',
+            style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+          ),
+          backgroundColor: WePlayColors.energy,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          duration: const Duration(seconds: 2),
         ),
-        backgroundColor: WePlayColors.amber,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        duration: const Duration(seconds: 2),
-      ),
+      );
+      return;
+    }
+
+    await adService.showRewardedAd(
+      onRewarded: (amount) {
+        ref.read(coinNotifierProvider.notifier).earnCoins(amount);
+        ref.read(userStatsProvider.notifier).addAdCoins(amount);
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                '+$amount coins earned! 🎉',
+                style: GoogleFonts.nunito(fontWeight: FontWeight.w700),
+              ),
+              backgroundColor: WePlayColors.amber,
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      },
     );
   }
 }
