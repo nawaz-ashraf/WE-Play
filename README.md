@@ -46,7 +46,7 @@ If you enable Firebase:
 
 ## Privacy Policy
 
-See [PRIVACY_POLICY.md](PRIVACY_POLICY.md).
+See [PRIVACY-POLICY.html](PRIVACY-POLICY.html).
 
 ## License
 
