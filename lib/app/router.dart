@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:we_play/features/auth/splash_screen.dart';
+import 'package:we_play/app/theme.dart';
+import 'package:we_play/core/providers/game_unlock_provider.dart';
 import 'package:we_play/features/auth/auth_screen.dart';
-import 'package:we_play/features/lobby/lobby_screen.dart';
-import 'package:we_play/features/store/store_screen.dart';
-import 'package:we_play/features/profile/profile_screen.dart';
+import 'package:we_play/features/auth/splash_screen.dart';
+import 'package:we_play/features/games/beat_crash/beat_crash_screen.dart';
+import 'package:we_play/features/games/block_blast/block_blast_screen.dart';
+import 'package:we_play/features/games/color_switch/color_switch_screen.dart';
+import 'package:we_play/features/games/doodle_jump/doodle_jump_screen.dart';
+import 'package:we_play/features/games/flappy_bird/flappy_screen.dart';
 import 'package:we_play/features/games/game_screen.dart';
 import 'package:we_play/features/games/glow_merge/glow_merge_screen.dart';
-import 'package:we_play/features/games/beat_crash/beat_crash_screen.dart';
-import 'package:we_play/features/games/snack_stackers/snack_screen.dart';
-import 'package:we_play/features/games/micro_heist/heist_screen.dart';
-import 'package:we_play/features/games/flappy_bird/flappy_screen.dart';
+import 'package:we_play/features/games/hot_air_balloon/hot_air_balloon_screen.dart';
 import 'package:we_play/features/games/memory_puzzle/memory_screen.dart';
+import 'package:we_play/features/games/micro_heist/heist_screen.dart';
 import 'package:we_play/features/games/snake_game/snake_screen.dart';
-import 'package:we_play/features/games/block_blast/block_blast_screen.dart';
+import 'package:we_play/features/games/trex_runner/trex_runner_screen.dart';
 import 'package:we_play/features/games/wood_block/wood_block_screen.dart';
-import 'package:we_play/features/games/color_switch/color_switch_screen.dart';
-import 'package:we_play/app/theme.dart';
+import 'package:we_play/features/lobby/lobby_screen.dart';
+import 'package:we_play/features/profile/profile_screen.dart';
+import 'package:we_play/features/store/store_screen.dart';
 
 /// Bottom navigation shell for main screens
 class AppShell extends StatefulWidget {
@@ -89,6 +93,12 @@ class _AppShellState extends State<AppShell> {
   }
 }
 
+String? _lockedGameRedirect(BuildContext context, String gameId) {
+  final container = ProviderScope.containerOf(context, listen: false);
+  final unlockNotifier = container.read(gameUnlockProvider.notifier);
+  return unlockNotifier.isUnlocked(gameId) ? null : '/store';
+}
+
 /// App-level router configuration using go_router
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -107,57 +117,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: '/lobby',
           builder: (context, state) => const LobbyScreen(),
-          routes: [
-            GoRoute(
-              path: 'game/glow_merge',
-              builder: (context, state) => const GlowMergeScreen(),
-            ),
-            GoRoute(
-              path: 'game/beat_crash',
-              builder: (context, state) => const BeatCrashScreen(),
-            ),
-            GoRoute(
-              path: 'game/snack_stackers',
-              builder: (context, state) => const SnackStackersScreen(),
-            ),
-            GoRoute(
-              path: 'game/micro_heist',
-              builder: (context, state) => const MicroHeistScreen(),
-            ),
-            GoRoute(
-              path: 'game/flappy_bird',
-              builder: (context, state) => const FlappyBirdScreen(),
-            ),
-            GoRoute(
-              path: 'game/memory_puzzle',
-              builder: (context, state) => const MemoryPuzzleScreen(),
-            ),
-            GoRoute(
-              path: 'game/snake_game',
-              builder: (context, state) => const SnakeGameScreen(),
-            ),
-            GoRoute(
-              path: 'game/block_blast',
-              builder: (context, state) => const BlockBlastScreen(),
-            ),
-            GoRoute(
-              path: 'game/wood_block',
-              builder: (context, state) => const WoodBlockScreen(),
-            ),
-            GoRoute(
-              path: 'game/color_switch',
-              builder: (context, state) => const ColorSwitchScreen(),
-            ),
-            GoRoute(
-              path: 'game/:id',
-              builder: (context, state) {
-                final gameId = state.pathParameters['id']!;
-                return GameScreen(gameId: gameId);
-              },
-            ),
-          ],
         ),
-
         GoRoute(
           path: '/store',
           builder: (context, state) => const StoreScreen(),
@@ -167,6 +127,69 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) => const ProfileScreen(),
         ),
       ],
+    ),
+    GoRoute(
+      path: '/lobby/game/glow_merge',
+      builder: (context, state) => const GlowMergeScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/beat_crash',
+      builder: (context, state) => const BeatCrashScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/micro_heist',
+      builder: (context, state) => const MicroHeistScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/flappy_bird',
+      builder: (context, state) => const FlappyBirdScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/memory_puzzle',
+      builder: (context, state) => const MemoryPuzzleScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/snake_game',
+      builder: (context, state) => const SnakeGameScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/block_blast',
+      redirect: (context, state) => _lockedGameRedirect(context, 'block_blast'),
+      builder: (context, state) => const BlockBlastScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/wood_block',
+      redirect: (context, state) => _lockedGameRedirect(context, 'wood_block'),
+      builder: (context, state) => const WoodBlockScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/color_switch',
+      redirect: (context, state) =>
+          _lockedGameRedirect(context, 'color_switch'),
+      builder: (context, state) => const ColorSwitchScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/hot_air_balloon',
+      redirect: (context, state) =>
+          _lockedGameRedirect(context, 'hot_air_balloon'),
+      builder: (context, state) => const HotAirBalloonScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/trex_run',
+      redirect: (context, state) => _lockedGameRedirect(context, 'trex_run'),
+      builder: (context, state) => const TRexRunnerScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/doodle_jump',
+      redirect: (context, state) => _lockedGameRedirect(context, 'doodle_jump'),
+      builder: (context, state) => const DoodleJumpScreen(),
+    ),
+    GoRoute(
+      path: '/lobby/game/:id',
+      builder: (context, state) {
+        final gameId = state.pathParameters['id']!;
+        return GameScreen(gameId: gameId);
+      },
     ),
   ],
 );

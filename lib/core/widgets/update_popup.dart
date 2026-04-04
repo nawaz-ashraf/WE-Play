@@ -12,15 +12,18 @@ class UpdatePopup extends StatelessWidget {
     required this.onSkip,
   });
 
-  static Future<void> show(BuildContext context, {required VoidCallback onSkip}) {
+  static Future<void> show(
+    BuildContext context, {
+    required VoidCallback onUpdate,
+    required VoidCallback onSkip,
+  }) {
     return showDialog(
       context: context,
-      barrierDismissible: false, // Force them to press a button
+      barrierDismissible: true,
       builder: (ctx) => UpdatePopup(
         onUpdate: () {
-          // In a real app, use url_launcher to open App Store/Play Store
           Navigator.of(ctx).pop();
-          onSkip();
+          onUpdate();
         },
         onSkip: () {
           Navigator.of(ctx).pop();
@@ -40,7 +43,8 @@ class UpdatePopup extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: WePlayColors.primary.withAlpha(50), width: 2),
+          border:
+              Border.all(color: WePlayColors.primary.withAlpha(50), width: 2),
           boxShadow: [
             BoxShadow(
               color: WePlayColors.primary.withAlpha(20),
@@ -60,10 +64,11 @@ class UpdatePopup extends StatelessWidget {
                 color: WePlayColors.primary.withAlpha(20),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.system_update_rounded, size: 48, color: WePlayColors.primary),
+              child: const Icon(Icons.system_update_rounded,
+                  size: 48, color: WePlayColors.primary),
             ),
             const SizedBox(height: 20),
-            
+
             // Title
             Text(
               'Update Available!',
@@ -75,7 +80,7 @@ class UpdatePopup extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
-            
+
             // Description
             Text(
               'A new version of MiniPlay Hub is out with new games and bug fixes. Update now to enhance your experience!',
@@ -86,7 +91,7 @@ class UpdatePopup extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
-            
+
             // Primary Button
             SizedBox(
               width: double.infinity,
@@ -96,7 +101,7 @@ class UpdatePopup extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            
+
             // Secondary Button
             TextButton(
               onPressed: onSkip,

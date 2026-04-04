@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'shared_prefs_provider.dart';
 
 class UserStats {
@@ -29,7 +30,8 @@ class UserStats {
   }
 }
 
-final userStatsProvider = NotifierProvider<UserStatsNotifier, UserStats>(UserStatsNotifier.new);
+final userStatsProvider =
+    NotifierProvider<UserStatsNotifier, UserStats>(UserStatsNotifier.new);
 
 class UserStatsNotifier extends Notifier<UserStats> {
   static const _gamesPlayedKey = 'stats_games_played';
@@ -40,48 +42,80 @@ class UserStatsNotifier extends Notifier<UserStats> {
   @override
   UserStats build() {
     final prefs = ref.watch(sharedPreferencesProvider);
-    
-    int gamesPlayed = prefs.getInt(_gamesPlayedKey) ?? 127; // Default 127 from previous hardcoded UI
-    int loginStreak = prefs.getInt(_loginStreakKey) ?? 5; // Default 5
-    String lastLoginDate = prefs.getString(_lastLoginDateKey) ?? '';
-    int adCoins = prefs.getInt(_adCoinsKey) ?? 0;
+    final next = UserStats(
+      gamesPlayed: prefs.getInt(_gamesPlayedKey) ?? 0,
+      loginStreak: prefs.getInt(_loginStreakKey) ?? 0,
+      lastLoginDate: prefs.getString(_lastLoginDateKey) ?? '',
+      adCoins: prefs.getInt(_adCoinsKey) ?? 0,
+    );
 
-    // Login streak logic
+    return _applyDailyStreak(next, persist: true);
+  }
+
+  void refreshDailyStreak() {
+    final next = _applyDailyStreak(state, persist: true);
+    if (next.loginStreak != state.loginStreak ||
+        next.lastLoginDate != state.lastLoginDate) {
+      state = next;
+    }
+  }
+
+  UserStats _applyDailyStreak(UserStats current, {required bool persist}) {
     final today = DateTime.now();
-    final todayStr = '${today.year}-${today.month}-${today.day}';
-    
-    if (lastLoginDate != todayStr) {
-      if (lastLoginDate.isNotEmpty) {
-        final lastLoginParts = lastLoginDate.split('-');
-        if (lastLoginParts.length == 3) {
-          final lastDate = DateTime(
-            int.parse(lastLoginParts[0]),
-            int.parse(lastLoginParts[1]),
-            int.parse(lastLoginParts[2]),
-          );
-          
-          final difference = today.difference(lastDate).inDays;
-          if (difference == 1) {
-            loginStreak += 1; // Uninterrupted daily login
-          } else if (difference > 1) {
-            loginStreak = 1; // Streak broken
-          }
-        }
-      } else {
-        // First ever login
-        loginStreak = 1;
-      }
-      lastLoginDate = todayStr;
-      prefs.setInt(_loginStreakKey, loginStreak);
-      prefs.setString(_lastLoginDateKey, lastLoginDate);
+    final todayKey = _dateKey(today);
+
+    if (current.lastLoginDate == todayKey) {
+      return current;
     }
 
-    return UserStats(
-      gamesPlayed: gamesPlayed,
-      loginStreak: loginStreak,
-      lastLoginDate: lastLoginDate,
-      adCoins: adCoins,
+    int nextStreak;
+    if (current.lastLoginDate.isEmpty) {
+      nextStreak = 1;
+    } else {
+      final lastDate = _parseDateKey(current.lastLoginDate);
+      if (lastDate == null) {
+        nextStreak = 1;
+      } else {
+        final difference = _stripTime(today).difference(lastDate).inDays;
+        if (difference == 1) {
+          nextStreak = current.loginStreak + 1;
+        } else {
+          nextStreak = 1;
+        }
+      }
+    }
+
+    if (persist) {
+      final prefs = ref.read(sharedPreferencesProvider);
+      prefs.setInt(_loginStreakKey, nextStreak);
+      prefs.setString(_lastLoginDateKey, todayKey);
+    }
+
+    return current.copyWith(
+      loginStreak: nextStreak,
+      lastLoginDate: todayKey,
     );
+  }
+
+  DateTime? _parseDateKey(String value) {
+    final parts = value.split('-');
+    if (parts.length != 3) return null;
+    final year = int.tryParse(parts[0]);
+    final month = int.tryParse(parts[1]);
+    final day = int.tryParse(parts[2]);
+    if (year == null || month == null || day == null) return null;
+    return DateTime(year, month, day);
+  }
+
+  DateTime _stripTime(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  String _dateKey(DateTime date) {
+    final year = date.year.toString().padLeft(4, '0');
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '$year-$month-$day';
   }
 
   void incrementGamesPlayed() {

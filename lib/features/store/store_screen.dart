@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:we_play/app/theme.dart';
-import 'package:we_play/core/providers/game_unlock_provider.dart';
 import 'package:we_play/core/models/store_game_model.dart';
 import 'package:we_play/core/providers/ad_provider.dart';
+import 'package:we_play/core/providers/game_unlock_provider.dart';
 import 'package:we_play/core/widgets/coin_display.dart';
 
 /// App Store screen
@@ -53,9 +53,10 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
     // Watch unlock state strictly for reactivity, but access logic through notifier
     ref.watch(gameUnlockProvider);
     final notifier = ref.read(gameUnlockProvider.notifier);
-    
+
     // Store exclusives
-    final storeGames = GameCatalog.allGames.where((g) => !g.isDefaultGame).toList();
+    final storeGames =
+        GameCatalog.allGames.where((g) => !g.isDefaultGame).toList();
 
     final theme = Theme.of(context);
     final onSurface = theme.colorScheme.onSurface;
@@ -93,13 +94,15 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                 ],
               ),
             ),
-            
+
             // Available items
             Expanded(
               child: ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 itemCount: storeGames.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 16),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 16),
                 itemBuilder: (context, index) {
                   final game = storeGames[index];
                   final isUnlocked = notifier.isUnlocked(game.id);
@@ -128,10 +131,11 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                             color: game.accentColor.withAlpha(20),
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: Icon(game.icon, color: game.accentColor, size: 28),
+                          child: Icon(game.icon,
+                              color: game.accentColor, size: 28),
                         ),
                         const SizedBox(width: 16),
-                        
+
                         // Details
                         Expanded(
                           child: Column(
@@ -156,12 +160,12 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
                             ],
                           ),
                         ),
-                        
+
                         // Action Button
                         const SizedBox(width: 12),
                         isUnlocked
                             ? _buildPurchasedButton()
-                            : _buildBuyButton(game, notifier),
+                            : _buildLockedAction(game, notifier),
                       ],
                     ),
                   );
@@ -219,12 +223,13 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Unlocked ${game.title}! It is now available in the Lobby.'),
+              content: Text(
+                  'Unlocked ${game.title}! It is now available in the Home games list.'),
               backgroundColor: WePlayColors.primary,
             ),
           );
         } else {
-           ScaffoldMessenger.of(context).showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Not enough coins to unlock this game.'),
               backgroundColor: WePlayColors.energy,
@@ -250,12 +255,12 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-             const Icon(Icons.monetization_on_rounded, color: Colors.white, size: 16),
-             const SizedBox(width: 6),
-             Text(
-              game.coinPrice.toString(),
+            const Icon(Icons.lock_open_rounded, color: Colors.white, size: 16),
+            const SizedBox(width: 6),
+            Text(
+              'unlock',
               style: GoogleFonts.orbitron(
-                fontSize: 14,
+                fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
               ),
@@ -263,6 +268,40 @@ class _StoreScreenState extends ConsumerState<StoreScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildLockedAction(StoreGameModel game, GameUnlockNotifier notifier) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          decoration: BoxDecoration(
+            color: WePlayColors.energy.withAlpha(22),
+            borderRadius: BorderRadius.circular(999),
+            border: Border.all(color: WePlayColors.energy.withAlpha(70)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.lock_rounded,
+                  color: WePlayColors.energy, size: 12),
+              const SizedBox(width: 4),
+              Text(
+                '${game.coinPrice} coins',
+                style: GoogleFonts.nunito(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: WePlayColors.energy,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        _buildBuyButton(game, notifier),
+      ],
     );
   }
 }

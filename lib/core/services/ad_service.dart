@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Production-ready AdMob service handling interstitial, rewarded, and banner ads.
 ///
-/// Uses Google test ad unit IDs — swap with production IDs before release.
+/// Uses production Android AdMob unit IDs and test iOS IDs.
 class AdService {
   final SharedPreferences _prefs;
 
@@ -14,18 +14,17 @@ class AdService {
   static const _sessionCountKey = 'ad_session_count';
   static const int _sessionThreshold = 3;
 
-  // ── Test Ad Unit IDs ─────────────────────────
-  // TODO: Replace with production ad unit IDs before release
+  // ── Ad Unit IDs ─────────────────────────────
   static String get _interstitialAdUnitId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/1033173712'
+      ? 'ca-app-pub-4392358942856616/9054884661'
       : 'ca-app-pub-3940256099942544/4411468910';
 
   static String get _rewardedAdUnitId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/5224354917'
+      ? 'ca-app-pub-4392358942856616/9054884661'
       : 'ca-app-pub-3940256099942544/1712485313';
 
   static String get _bannerAdUnitId => Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
+      ? 'ca-app-pub-4392358942856616/1367966331'
       : 'ca-app-pub-3940256099942544/2934735716';
 
   // ── Ad Instances ─────────────────────────────
@@ -132,7 +131,8 @@ class AdService {
   /// Show a rewarded ad. Returns `true` if the user earned a reward, `false` otherwise.
   ///
   /// [onRewarded] is called with the reward amount when the user finishes watching.
-  Future<bool> showRewardedAd({required void Function(int amount) onRewarded}) async {
+  Future<bool> showRewardedAd(
+      {required void Function(int amount) onRewarded}) async {
     if (_rewardedAd == null) {
       // Try to reload for next time
       _loadRewardedAd();

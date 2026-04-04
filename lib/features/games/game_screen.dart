@@ -7,11 +7,6 @@ import 'package:we_play/core/widgets/we_play_button.dart';
 /// Game names and accent colors
 const _gameData = {
   'beat_crash': ('Beat Crash', WePlayColors.energy, Icons.music_note_rounded),
-  'snack_stackers': (
-    'Snack Stackers',
-    WePlayColors.amber,
-    Icons.fastfood_rounded
-  ),
   'micro_heist': (
     'Micro Heist',
     WePlayColors.secondary,

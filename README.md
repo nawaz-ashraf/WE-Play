@@ -1,16 +1,53 @@
-# we_play
+# WE Play
 
-A new Flutter project.
+MiniPlay Hub - Gen-Z hyper-casual multi-game platform built with Flutter.
+
+## Overview
+
+WE Play is a collection of fast, lightweight mini games in a single hub. The
+app supports optional Google sign-in, cloud-backed progress, and ad-based
+monetization.
+
+## Key Features
+
+- Multiple hyper-casual mini games in one app
+- Optional Google sign-in
+- Cloud sync via Firebase (Auth, Firestore, Storage)
+- Ad monetization with Google AdMob
+- Share flow for inviting friends
+
+## Tech Stack
+
+- Flutter / Dart
+- Flame + Forge2D
+- Firebase Auth, Firestore, Storage
+- Riverpod
+- Google Mobile Ads
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Install Flutter SDK (>= 3.10.0) and run `flutter doctor`.
+2. Fetch packages: `flutter pub get`.
+3. Run the app: `flutter run`.
 
-A few resources to get you started if this is your first Flutter project:
+### Firebase setup (optional)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+If you enable Firebase:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Add `google-services.json` for Android in `android/app/`.
+- Add `GoogleService-Info.plist` for iOS in `ios/Runner/`.
+- Run `flutterfire configure` if you use the FlutterFire CLI.
+
+## Project Structure
+
+- `lib/` application code
+- `assets/` images, audio, animations
+- `android/`, `ios/` platform projects
+
+## Privacy Policy
+
+See [PRIVACY_POLICY.md](PRIVACY_POLICY.md).
+
+## License
+
+Not specified.

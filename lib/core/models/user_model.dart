@@ -32,7 +32,6 @@ class UserModel {
       totalXp: 4800,
       highScores: {
         'beat_crash': 12400,
-        'snack_stackers': 850,
         'micro_heist': 15,
         'glow_merge': 2048,
         'flick_royale': 9,

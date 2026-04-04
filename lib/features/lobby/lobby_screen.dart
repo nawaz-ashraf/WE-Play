@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:we_play/app/theme.dart';
-import 'package:we_play/core/widgets/coin_display.dart';
-import 'package:we_play/core/widgets/game_card.dart';
 import 'package:we_play/core/providers/game_unlock_provider.dart';
 import 'package:we_play/core/providers/update_provider.dart';
+import 'package:we_play/core/providers/user_stats_provider.dart';
+import 'package:we_play/core/widgets/coin_display.dart';
+import 'package:we_play/core/widgets/game_card.dart';
 import 'package:we_play/core/widgets/update_popup.dart';
-
-
-
 
 /// Main lobby screen — game selection home
 class LobbyScreen extends ConsumerStatefulWidget {
@@ -38,15 +36,34 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
 
     // Check for app update
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        final needsUpdate = ref.read(updateProvider);
-        if (needsUpdate) {
-          UpdatePopup.show(context, onSkip: () {
-            ref.read(updateProvider.notifier).markUpdateDismissed();
-          });
-        }
-      }
+      if (!mounted) return;
+      _checkAndShowUpdatePopup();
     });
+  }
+
+  Future<void> _checkAndShowUpdatePopup() async {
+    final notifier = ref.read(updateProvider.notifier);
+    await notifier.checkForUpdate();
+    if (!mounted) {
+      return;
+    }
+
+    final updateState = ref.read(updateProvider);
+    if (!updateState.shouldShowPopup || updateState.hasShownThisSession) {
+      return;
+    }
+
+    notifier.markPopupShownThisSession();
+
+    await UpdatePopup.show(
+      context,
+      onUpdate: () async {
+        await notifier.openStorePage();
+      },
+      onSkip: () async {
+        await notifier.dismissForCurrentLatestVersion();
+      },
+    );
   }
 
   @override
@@ -60,6 +77,15 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
     final theme = Theme.of(context);
     final onSurface = theme.colorScheme.onSurface;
     final subtleText = onSurface.withAlpha(140);
+    final userStats = ref.watch(userStatsProvider);
+
+    ref.watch(gameUnlockProvider);
+    final unlockedGames = ref.read(gameUnlockProvider.notifier).lobbyGames;
+
+    final streakCount = userStats.loginStreak;
+    final streakLabel =
+        streakCount == 1 ? '1 day streak' : '$streakCount days streak';
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
@@ -144,7 +170,7 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
                           color: WePlayColors.amber, size: 20),
                       const SizedBox(width: 8),
                       Text(
-                        '5 day streak 🔥',
+                        '$streakLabel 🔥',
                         style: GoogleFonts.nunito(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -153,7 +179,7 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
                       ),
                       const Spacer(),
                       Text(
-                        'claim +35 coins',
+                        'open daily to keep it',
                         style: GoogleFonts.nunito(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -169,12 +195,10 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
               ),
             ),
 
-
-
             // Games section header
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 12),
                 child: Text(
                   'pick your vibe ✨',
                   style: GoogleFonts.nunito(
@@ -194,7 +218,6 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
                   children: [
                     // Dynamic games grid depending on unlocked games
                     Builder(builder: (context) {
-                      final unlockedGames = ref.watch(gameUnlockProvider.notifier).lobbyGames;
                       final List<Widget> rows = [];
                       for (int i = 0; i < unlockedGames.length; i += 2) {
                         rows.add(
@@ -212,8 +235,10 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
                                       icon: unlockedGames[i].icon,
                                       accentColor: unlockedGames[i].accentColor,
                                       highScore: 0,
-                                      playerCount: 400 + (unlockedGames[i].title.length * 20),
-                                      onTap: () => context.push('/lobby/game/${unlockedGames[i].id}'),
+                                      playerCount: 400 +
+                                          (unlockedGames[i].title.length * 20),
+                                      onTap: () => context.push(
+                                          '/lobby/game/${unlockedGames[i].id}'),
                                     ),
                                   ),
                                 ),
@@ -225,12 +250,17 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
                                       child: GameCard(
                                         gameId: unlockedGames[i + 1].id,
                                         name: unlockedGames[i + 1].title,
-                                        description: unlockedGames[i + 1].description,
+                                        description:
+                                            unlockedGames[i + 1].description,
                                         icon: unlockedGames[i + 1].icon,
-                                        accentColor: unlockedGames[i + 1].accentColor,
+                                        accentColor:
+                                            unlockedGames[i + 1].accentColor,
                                         highScore: 0,
-                                        playerCount: 400 + (unlockedGames[i + 1].title.length * 20),
-                                        onTap: () => context.push('/lobby/game/${unlockedGames[i + 1].id}'),
+                                        playerCount: 400 +
+                                            (unlockedGames[i + 1].title.length *
+                                                20),
+                                        onTap: () => context.push(
+                                            '/lobby/game/${unlockedGames[i + 1].id}'),
                                       ),
                                     ),
                                   )
@@ -241,7 +271,7 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
                           ),
                         );
                       }
-                      
+
                       return Column(
                         children: rows,
                       );

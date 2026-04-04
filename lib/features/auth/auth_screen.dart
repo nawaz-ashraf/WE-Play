@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:we_play/app/theme.dart';
+import 'package:we_play/core/providers/app_bootstrap_provider.dart';
 import 'package:we_play/core/widgets/we_play_button.dart';
 
 /// Auth screen — placeholder for Firebase Auth
-class AuthScreen extends StatelessWidget {
+class AuthScreen extends ConsumerWidget {
   const AuthScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: WePlayColors.background,
       body: SafeArea(
@@ -46,7 +48,12 @@ class AuthScreen extends StatelessWidget {
               WePlayButton(
                 label: 'continue with google',
                 icon: Icons.g_mobiledata_rounded,
-                onPressed: () => context.go('/lobby'),
+                onPressed: () async {
+                  await ref.read(appBootstrapProvider).initializeSession();
+                  if (context.mounted) {
+                    context.go('/lobby');
+                  }
+                },
                 width: double.infinity,
               ),
               const SizedBox(height: 16),
@@ -54,9 +61,14 @@ class AuthScreen extends StatelessWidget {
               WePlayButton(
                 label: 'play as guest',
                 icon: Icons.person_outline_rounded,
-                onPressed: () => context.go('/lobby'),
+                onPressed: () async {
+                  await ref.read(appBootstrapProvider).initializeSession();
+                  if (context.mounted) {
+                    context.go('/lobby');
+                  }
+                },
                 width: double.infinity,
-                gradientColors: [
+                gradientColors: const [
                   WePlayColors.surfaceLight,
                   WePlayColors.surface,
                 ],

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:we_play/app/theme.dart';
+import 'package:we_play/core/providers/app_bootstrap_provider.dart';
 
 /// Animated splash screen — WE PLAY logo with pulse + navigate to lobby
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
@@ -41,8 +43,9 @@ class _SplashScreenState extends State<SplashScreen>
       curve: Curves.easeOut,
     );
 
-    // Navigate to lobby after 2.5 seconds
-    Future.delayed(const Duration(milliseconds: 2500), () {
+    // Initialize local account/session state then navigate.
+    Future.delayed(const Duration(milliseconds: 2500), () async {
+      await ref.read(appBootstrapProvider).initializeSession();
       if (mounted) {
         context.go('/lobby');
       }
