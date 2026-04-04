@@ -2,7 +2,7 @@
 
 Effective date: 2026-04-04
 
-This Privacy Policy explains how WE Play ("we", "us") collects, uses, and
+This Privacy Policy explains how Miniplay Hub ("we", "us") collects, uses, and
 shares information when you use the app.
 
 ## Information We Collect
@@ -53,4 +53,4 @@ at the top of this page when changes are made.
 
 ## Contact
 
-Email: [YOUR_CONTACT_EMAIL]
+Email: sr.nawaz446@gmail.com
