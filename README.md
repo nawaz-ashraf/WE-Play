@@ -4,7 +4,7 @@ MiniPlay Hub - Gen-Z hyper-casual multi-game platform built with Flutter.
 
 ## Overview
 
-Mibiplay Hub is a collection of fast, lightweight mini games in a single hub. The
+Miniplay Hub is a collection of fast, lightweight mini games in a single hub. The
 app supports optional Google sign-in, cloud-backed progress, and ad-based
 monetization.
 
