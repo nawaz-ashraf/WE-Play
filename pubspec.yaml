@@ -1,7 +1,7 @@
 name: we_play
 description: MiniPlay Hub — Gen-Z hyper-casual multi-game platform
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
