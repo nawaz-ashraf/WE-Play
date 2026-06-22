@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'memory_engine.dart';
 import 'memory_styles.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 // ─────────────────────────────────────────────
 //  STATE
@@ -74,7 +75,12 @@ class MemoryState {
 //  NOTIFIER
 // ─────────────────────────────────────────────
 class MemoryNotifier extends StateNotifier<MemoryState> {
-  MemoryNotifier() : super(const MemoryState());
+  MemoryNotifier() : super(const MemoryState()) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'memory_puzzle';
 
   final _engine = MemoryEngine();
   Timer? _timer;
@@ -159,6 +165,10 @@ class MemoryNotifier extends StateNotifier<MemoryState> {
           bestScore:     newBest,
           status:        isComplete ? MemoryStatus.complete : MemoryStatus.playing,
         );
+
+        if ((newScore + bonus * 10) > state.bestScore) {
+          _scoreSvc.saveBestScore(_gameId, newScore + bonus * 10);
+        }
         break;
 
       case FlipResult.noMatch:
@@ -192,6 +202,13 @@ class MemoryNotifier extends StateNotifier<MemoryState> {
     _timer?.cancel();
     _flipBackTimer?.cancel();
     super.dispose();
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 

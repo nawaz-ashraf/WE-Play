@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'doodle_models.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 class DoodleState {
   const DoodleState({
@@ -18,6 +19,7 @@ class DoodleState {
     this.coins = const [],
     this.scrollOffset = 0,
     this.score = 0,
+    this.bestScore = 0,
     this.coinPickups = 0,
     this.coinsEarned = 0,
   });
@@ -32,6 +34,7 @@ class DoodleState {
   final List<DoodleCoin> coins;
   final double scrollOffset;
   final int score;
+  final int bestScore;
   final int coinPickups;
   final int coinsEarned;
 
@@ -46,6 +49,7 @@ class DoodleState {
     List<DoodleCoin>? coins,
     double? scrollOffset,
     int? score,
+    int? bestScore,
     int? coinPickups,
     int? coinsEarned,
   }) {
@@ -60,6 +64,7 @@ class DoodleState {
       coins: coins ?? this.coins,
       scrollOffset: scrollOffset ?? this.scrollOffset,
       score: score ?? this.score,
+      bestScore: bestScore ?? this.bestScore,
       coinPickups: coinPickups ?? this.coinPickups,
       coinsEarned: coinsEarned ?? this.coinsEarned,
     );
@@ -67,7 +72,12 @@ class DoodleState {
 }
 
 class DoodleNotifier extends StateNotifier<DoodleState> {
-  DoodleNotifier() : super(const DoodleState());
+  DoodleNotifier() : super(const DoodleState()) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'doodle_jump';
 
   final _rng = Random();
   double _screenW = 400;
@@ -238,6 +248,11 @@ class DoodleNotifier extends StateNotifier<DoodleState> {
     final scrollOffset = state.scrollOffset + scrollDelta;
     final score = (scrollOffset / DoodleConst.scoreStep).toInt();
     final coinsEarned = (score ~/ 170) + coinPickups * 3;
+    final newBest = score > state.bestScore ? score : state.bestScore;
+
+    if (score > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, score);
+    }
 
     final isDead = newY > _screenH + 80;
 
@@ -250,6 +265,7 @@ class DoodleNotifier extends StateNotifier<DoodleState> {
       coins: remainingCoins,
       scrollOffset: scrollOffset,
       score: score,
+      bestScore: newBest,
       coinPickups: coinPickups,
       coinsEarned: coinsEarned,
     ));
@@ -297,6 +313,13 @@ class DoodleNotifier extends StateNotifier<DoodleState> {
                 : DoodlePlatformType.normal;
 
     return DoodlePlatform(x: x, y: y, type: type);
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 

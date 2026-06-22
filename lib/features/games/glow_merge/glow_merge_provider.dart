@@ -3,6 +3,7 @@ import 'glow_merge_logic.dart';
 import '../../../../core/providers/coin_provider.dart';
 import 'package:we_play/core/providers/user_stats_provider.dart';
 import 'package:we_play/core/providers/ad_provider.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 // ─────────────────────────────────────────────
 //  STATE
@@ -58,7 +59,12 @@ class GlowMergeNotifier extends StateNotifier<GlowMergeState> {
   GlowMergeNotifier(this.ref)
       : super(GlowMergeState(
           grid: List.generate(4, (_) => List<Blob?>.filled(4, null)),
-        ));
+        )) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'glow_merge';
 
   void startGame() {
     final grid = _engine.newGame();
@@ -93,6 +99,10 @@ class GlowMergeNotifier extends StateNotifier<GlowMergeState> {
       status: isOver ? GameStatus.over : GameStatus.playing,
     );
 
+    if (newScore > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, newScore);
+    }
+
     if (isOver && newCoins > 0) {
       ref.read(coinNotifierProvider.notifier).earnCoins(newCoins);
       ref.read(userStatsProvider.notifier).incrementGamesPlayed();
@@ -102,6 +112,13 @@ class GlowMergeNotifier extends StateNotifier<GlowMergeState> {
 
   void resetMergeEvents() {
     state = state.copyWith(lastMerges: []);
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 

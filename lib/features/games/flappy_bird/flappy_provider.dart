@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'flappy_styles.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 // ─────────────────────────────────────────────
 //  STATE
@@ -41,7 +42,12 @@ class FlappyState {
 //  NOTIFIER
 // ─────────────────────────────────────────────
 class FlappyNotifier extends StateNotifier<FlappyState> {
-  FlappyNotifier() : super(const FlappyState());
+  FlappyNotifier() : super(const FlappyState()) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'flappy_bird';
 
   void startGame() {
     state = FlappyState(
@@ -70,6 +76,10 @@ class FlappyNotifier extends StateNotifier<FlappyState> {
       coins:     newCoins,
       pipeSpeed: newSpeed,
     );
+
+    if (newScore > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, newScore);
+    }
   }
 
   void die() {
@@ -79,6 +89,13 @@ class FlappyNotifier extends StateNotifier<FlappyState> {
 
   void reset() {
     state = FlappyState(bestScore: state.bestScore);
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 

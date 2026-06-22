@@ -38,6 +38,9 @@ dependencies:
   # UI / Animation
   flutter_animate: ^4.5.0
 
+  # Audio
+  audioplayers: ^6.0.0
+
   # Sharing
   share_plus: ^10.1.2
 

@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'trex_models.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 class TrexRunState {
   const TrexRunState({
@@ -19,6 +20,7 @@ class TrexRunState {
     this.speed = TrexConst.speedBase,
     this.groundOffset = 0,
     this.score = 0,
+    this.bestScore = 0,
     this.coinPickups = 0,
     this.coinsEarned = 0,
     this.spawnTimer = TrexConst.spawnBase,
@@ -38,6 +40,7 @@ class TrexRunState {
   final double speed;
   final double groundOffset;
   final int score;
+  final int bestScore;
   final int coinPickups;
   final int coinsEarned;
   final double spawnTimer;
@@ -57,6 +60,7 @@ class TrexRunState {
     double? speed,
     double? groundOffset,
     int? score,
+    int? bestScore,
     int? coinPickups,
     int? coinsEarned,
     double? spawnTimer,
@@ -76,6 +80,7 @@ class TrexRunState {
       speed: speed ?? this.speed,
       groundOffset: groundOffset ?? this.groundOffset,
       score: score ?? this.score,
+      bestScore: bestScore ?? this.bestScore,
       coinPickups: coinPickups ?? this.coinPickups,
       coinsEarned: coinsEarned ?? this.coinsEarned,
       spawnTimer: spawnTimer ?? this.spawnTimer,
@@ -87,7 +92,12 @@ class TrexRunState {
 }
 
 class TrexRunNotifier extends StateNotifier<TrexRunState> {
-  TrexRunNotifier() : super(const TrexRunState());
+  TrexRunNotifier() : super(const TrexRunState()) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'trex_runner';
 
   final _rng = Random();
 
@@ -252,6 +262,11 @@ class TrexRunNotifier extends StateNotifier<TrexRunState> {
 
     final coinsEarned = (newScore ~/ 150) + newCoinPickups * 2;
 
+    final newBest = newScore > state.bestScore ? newScore : state.bestScore;
+    if (newScore > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, newScore);
+    }
+
     _setStateSafely(state.copyWith(
       status: hitObstacle ? TrexRunStatus.dead : TrexRunStatus.playing,
       trexY: newY,
@@ -264,6 +279,7 @@ class TrexRunNotifier extends StateNotifier<TrexRunState> {
       speed: newSpeed,
       groundOffset: nextGroundOffset,
       score: newScore,
+      bestScore: newBest,
       coinPickups: newCoinPickups,
       coinsEarned: coinsEarned,
       spawnTimer: spawnTimer,
@@ -323,6 +339,13 @@ class TrexRunNotifier extends StateNotifier<TrexRunState> {
       height: 30,
       kind: TrexObstacleKind.birdHigh,
     );
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 

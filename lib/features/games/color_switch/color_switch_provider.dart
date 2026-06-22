@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'color_switch_styles.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 // ─────────────────────────────────────────────
 //  COLOR SWITCH TAP – DATA MODELS
@@ -82,7 +83,12 @@ class CSState {
 // ─────────────────────────────────────────────
 
 class CSNotifier extends StateNotifier<CSState> {
-  CSNotifier() : super(const CSState());
+  CSNotifier() : super(const CSState()) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'color_switch';
   final _rng = Random();
 
   // ── helpers ─────────────────────────────────
@@ -239,14 +245,29 @@ class CSNotifier extends StateNotifier<CSState> {
       speed:        newSpeed,
       bestScore:    newScore > state.bestScore ? newScore : state.bestScore,
     );
+
+    if (newScore > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, newScore);
+    }
   }
 
   void _die() {
+    final finalScore = state.score > state.bestScore ? state.score : state.bestScore;
+    if (state.score > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, state.score);
+    }
     state = state.copyWith(
       ballVelocity: 0,
       status: CSStatus.dead,
-      bestScore: state.score > state.bestScore ? state.score : state.bestScore,
+      bestScore: finalScore,
     );
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 

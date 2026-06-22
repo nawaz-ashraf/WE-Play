@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'beat_crash_game.dart';
 import 'beat_crash_provider.dart';
 import 'beat_crash_styles.dart';
@@ -23,6 +24,7 @@ class BeatCrashScreen extends ConsumerStatefulWidget {
 class _BeatCrashScreenState extends ConsumerState<BeatCrashScreen> {
   late BeatCrashGame _game;
   bool _gameStarted = false;
+  bool _soundOn = true;
 
   @override
   void initState() {
@@ -30,6 +32,24 @@ class _BeatCrashScreenState extends ConsumerState<BeatCrashScreen> {
     _game = BeatCrashGame(
       notifier: ref.read(beatCrashProvider.notifier),
     );
+    _loadSoundPref();
+  }
+
+  Future<void> _loadSoundPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    final soundOn = prefs.getBool('beat_crash_sound') ?? true;
+    if (mounted) {
+      setState(() => _soundOn = soundOn);
+      _game.audio.setSoundEnabled(soundOn);
+    }
+  }
+
+  Future<void> _toggleSound() async {
+    setState(() => _soundOn = !_soundOn);
+    _game.audio.setSoundEnabled(_soundOn);
+    HapticFeedback.selectionClick();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('beat_crash_sound', _soundOn);
   }
 
   void _startGame() {
@@ -85,6 +105,30 @@ class _BeatCrashScreenState extends ConsumerState<BeatCrashScreen> {
             onTap: () => Navigator.maybePop(context),
             child: const Icon(Icons.arrow_back_ios_new_rounded,
                 color: BeatColors.textSecondary, size: 20),
+          ),
+          const SizedBox(width: 8),
+
+          // Sound toggle
+          GestureDetector(
+            onTap: _toggleSound,
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF13131F),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                    color: const Color(0xFF7B61FF).withValues(alpha: 0.3)),
+              ),
+              child: Icon(
+                _soundOn
+                    ? Icons.volume_up_rounded
+                    : Icons.volume_off_rounded,
+                color: _soundOn
+                    ? const Color(0xFF7B61FF)
+                    : const Color(0xFF9090B0),
+                size: 18,
+              ),
+            ),
           ),
           const SizedBox(width: 12),
 

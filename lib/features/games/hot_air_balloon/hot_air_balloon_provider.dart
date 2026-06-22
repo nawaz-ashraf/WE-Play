@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'hot_air_balloon_models.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 class HotAirBalloonState {
   const HotAirBalloonState({
@@ -18,6 +19,7 @@ class HotAirBalloonState {
     this.coins = const [],
     this.worldSpeed = HabConst.worldSpeedBase,
     this.score = 0,
+    this.bestScore = 0,
     this.coinPickups = 0,
     this.coinsEarned = 0,
     this.spawnTimer = HabConst.spawnIntervalBase,
@@ -34,6 +36,7 @@ class HotAirBalloonState {
   final List<HabCoin> coins;
   final double worldSpeed;
   final int score;
+  final int bestScore;
   final int coinPickups;
   final int coinsEarned;
   final double spawnTimer;
@@ -50,6 +53,7 @@ class HotAirBalloonState {
     List<HabCoin>? coins,
     double? worldSpeed,
     int? score,
+    int? bestScore,
     int? coinPickups,
     int? coinsEarned,
     double? spawnTimer,
@@ -66,6 +70,7 @@ class HotAirBalloonState {
       coins: coins ?? this.coins,
       worldSpeed: worldSpeed ?? this.worldSpeed,
       score: score ?? this.score,
+      bestScore: bestScore ?? this.bestScore,
       coinPickups: coinPickups ?? this.coinPickups,
       coinsEarned: coinsEarned ?? this.coinsEarned,
       spawnTimer: spawnTimer ?? this.spawnTimer,
@@ -75,7 +80,12 @@ class HotAirBalloonState {
 }
 
 class HotAirBalloonNotifier extends StateNotifier<HotAirBalloonState> {
-  HotAirBalloonNotifier() : super(const HotAirBalloonState());
+  HotAirBalloonNotifier() : super(const HotAirBalloonState()) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'hot_air_balloon';
 
   final _rng = Random();
   double _screenW = 400;
@@ -238,6 +248,11 @@ class HotAirBalloonNotifier extends StateNotifier<HotAirBalloonState> {
 
     final coinsEarned = (newScore ~/ 120) + (newCoinPickups * 2);
 
+    final newBest = newScore > state.bestScore ? newScore : state.bestScore;
+    if (newScore > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, newScore);
+    }
+
     _setStateSafely(state.copyWith(
       balloonX: nextX,
       balloonVX: nextVX,
@@ -247,6 +262,7 @@ class HotAirBalloonNotifier extends StateNotifier<HotAirBalloonState> {
       coins: survivingCoins,
       worldSpeed: newSpeed,
       score: newScore,
+      bestScore: newBest,
       coinPickups: newCoinPickups,
       coinsEarned: coinsEarned,
       spawnTimer: spawnTimer,
@@ -292,6 +308,13 @@ class HotAirBalloonNotifier extends StateNotifier<HotAirBalloonState> {
       x: 24 + _rng.nextDouble() * (_screenW - 48),
       y: -40 - _rng.nextDouble() * 90,
     );
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 

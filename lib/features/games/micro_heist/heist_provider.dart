@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'heist_styles.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 // ─────────────────────────────────────────────
 //  STATE
@@ -55,7 +56,12 @@ class HeistState {
 //  NOTIFIER
 // ─────────────────────────────────────────────
 class HeistNotifier extends StateNotifier<HeistState> {
-  HeistNotifier() : super(const HeistState());
+  HeistNotifier() : super(const HeistState()) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'micro_heist';
 
   void startGame() {
     state = HeistState(
@@ -117,6 +123,10 @@ class HeistNotifier extends StateNotifier<HeistState> {
         status:        HeistStatus.levelComplete,
       );
     }
+
+    if (newScore > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, newScore);
+    }
   }
 
   /// Resume playing after level-complete animation
@@ -139,6 +149,13 @@ class HeistNotifier extends StateNotifier<HeistState> {
   int get currentLevel => state.level;
   HeistStatus get currentStatus => state.status;
   bool get hasLoot => state.hasLoot;
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
+  }
 }
 
 // ─────────────────────────────────────────────

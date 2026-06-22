@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'beat_crash_audio.dart';
 import 'beat_crash_components.dart';
 import 'beat_crash_provider.dart';
 import 'beat_crash_styles.dart';
@@ -19,6 +20,11 @@ class BeatCrashGame extends FlameGame with TapCallbacks {
   final BeatCrashNotifier notifier;
 
   BeatCrashGame({required this.notifier});
+
+  // ── Audio ──────────────────────────────────
+  final BeatCrashAudio _audio = BeatCrashAudio();
+  BeatCrashAudio get audio => _audio;
+  int _lastCombo = 0;
 
   // ── Sizing ────────────────────────────────
   late double _screenW;
@@ -63,6 +69,9 @@ class BeatCrashGame extends FlameGame with TapCallbacks {
 
     _totalBeats = (BeatConst.sessionSeconds / _beatInterval).ceil() + 4;
     _schedule   = BeatSchedule.generate(totalBeats: _totalBeats, seed: 42);
+
+    // Audio
+    await _audio.init();
 
     // Background
     _bg = BeatBackground(screenW: _screenW, screenH: _screenH);
@@ -142,6 +151,9 @@ class BeatCrashGame extends FlameGame with TapCallbacks {
     _blocks.remove(block);
     _post(() => notifier.recordHit(HitResult.miss));
 
+    // Sound
+    _audio.playMiss();
+
     // Red flash
     add(ScreenFlash(
       screenW: _screenW,
@@ -199,6 +211,27 @@ class BeatCrashGame extends FlameGame with TapCallbacks {
     _blocks.remove(best);
     _post(() => notifier.recordHit(result));
 
+    // Sound
+    switch (result) {
+      case HitResult.perfect:
+        _audio.playPerfect();
+        break;
+      case HitResult.good:
+        _audio.playGood();
+        break;
+      case HitResult.miss:
+        _audio.playMiss();
+        break;
+    }
+
+    // Check for combo milestone sounds
+    final currentCombo = notifier.state.combo;
+    const milestones = [5, 10, 20, 30, 50];
+    if (milestones.contains(currentCombo) && currentCombo != _lastCombo) {
+      _audio.playCombo(currentCombo);
+    }
+    _lastCombo = currentCombo;
+
     // Particles
     add(HitParticleBurst(
       position: Vector2(best.x, _targetY),
@@ -229,5 +262,10 @@ class BeatCrashGame extends FlameGame with TapCallbacks {
       position: pos,
     ));
   }
-}
 
+  @override
+  void onDetach() {
+    _audio.dispose();
+    super.onDetach();
+  }
+}

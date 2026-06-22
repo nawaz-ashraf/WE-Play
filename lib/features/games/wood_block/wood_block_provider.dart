@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'wood_block_engine.dart';
 import 'wood_block_styles.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 // ─────────────────────────────────────────────
 //  WOOD BLOCK – STATE & PROVIDER
@@ -62,7 +63,12 @@ class WoodNotifier extends StateNotifier<WoodState> {
           grid:      _emptyGrid(),
           colorGrid: _emptyColorGrid(),
           pieces:    const [],
-        ));
+        )) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'wood_block';
 
   final _engine = WoodBlockEngine();
 
@@ -122,12 +128,23 @@ class WoodNotifier extends StateNotifier<WoodState> {
       lastClearedCols: result.clearedCols,
       status:          isOver ? WoodStatus.over : WoodStatus.playing,
     );
+
+    if (newScore > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, newScore);
+    }
   }
 
   bool canPlaceAt(int pieceIndex, int row, int col) {
     final piece = state.pieces[pieceIndex];
     if (piece.placed) return false;
     return _engine.canPlace(state.grid, piece, row, col);
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 

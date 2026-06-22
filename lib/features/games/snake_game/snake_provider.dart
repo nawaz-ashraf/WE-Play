@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'snake_engine.dart';
 import 'snake_styles.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 // ─────────────────────────────────────────────
 //  STATE
@@ -64,7 +65,12 @@ class SnakeState {
 //  NOTIFIER
 // ─────────────────────────────────────────────
 class SnakeNotifier extends StateNotifier<SnakeState> {
-  SnakeNotifier() : super(const SnakeState());
+  SnakeNotifier() : super(const SnakeState()) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'snake_game';
 
   final _engine = SnakeEngine();
   double _stepAccum = 0; // accumulates dt between steps
@@ -147,6 +153,10 @@ class SnakeNotifier extends StateNotifier<SnakeState> {
 
     final newBest = newScore > state.bestScore ? newScore : state.bestScore;
 
+    if (newScore > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, newScore);
+    }
+
     state = state.copyWith(
       snake:         snake,
       foods:         foods,
@@ -165,6 +175,13 @@ class SnakeNotifier extends StateNotifier<SnakeState> {
     // Prevent reversing into self
     if (d.isOpposite(state.direction)) return;
     state = state.copyWith(nextDirection: d);
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 

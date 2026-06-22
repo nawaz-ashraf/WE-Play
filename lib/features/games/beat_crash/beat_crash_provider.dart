@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'beat_crash_styles.dart';
+import '../../../core/services/score_persistence_service.dart';
 
 // ─────────────────────────────────────────────
 //  STATE
@@ -59,7 +60,12 @@ class BeatCrashState {
 //  via a reference injected at construction.
 // ─────────────────────────────────────────────
 class BeatCrashNotifier extends StateNotifier<BeatCrashState> {
-  BeatCrashNotifier() : super(const BeatCrashState());
+  BeatCrashNotifier() : super(const BeatCrashState()) {
+    _loadSavedBestScore();
+  }
+
+  final _scoreSvc = ScorePersistenceService();
+  static const String _gameId = 'beat_crash';
 
   void startGame() {
     state = BeatCrashState(bestScore: state.bestScore, status: BeatGameStatus.playing);
@@ -84,6 +90,10 @@ class BeatCrashNotifier extends StateNotifier<BeatCrashState> {
       lastHit:    result,
       bestScore:  newScore > state.bestScore ? newScore : state.bestScore,
     );
+
+    if (newScore > state.bestScore) {
+      _scoreSvc.saveBestScore(_gameId, newScore);
+    }
   }
 
   void tick(double dt) {
@@ -112,6 +122,13 @@ class BeatCrashNotifier extends StateNotifier<BeatCrashState> {
       }
     }
     return mult;
+  }
+
+  Future<void> _loadSavedBestScore() async {
+    final saved = await _scoreSvc.loadBestScore(_gameId);
+    if (saved > state.bestScore && mounted) {
+      state = state.copyWith(bestScore: saved);
+    }
   }
 }
 
